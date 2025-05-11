@@ -12,15 +12,16 @@
   {:status 200
    :headers {"Content-Type" "application/json"}
    :body (json/encode
-          {:name "borkweb"
-           :short_name "borkweb"
+          {:name "zhealth"
+           :short_name "zhealth"
            :theme_color "#2b3035"
            :background_color "#2b3035"
            :start_url "./"
            :scope "./"
            :display "standalone"
            :prefer_related_applications false
-           :icons
-           [{:src "https://raw.githubusercontent.com/m3tti/borkweb/refs/heads/master/logo/borkweb.png"
-             :type "image/png"
-             :sizes "512x512"}]})})
+           ;; :icons
+           ;; [{:src "https://raw.githubusercontent.com/m3tti/borkweb/refs/heads/master/logo/borkweb.png"
+           ;;   :type "image/png"
+           ;;   :sizes "512x512"}]
+           })})
