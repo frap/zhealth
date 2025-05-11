@@ -1,7 +1,9 @@
 (ns static
   (:require [babashka.fs :as fs]
             [clojure.string :as str]
-            [clojure.java.io :as io]))
+            [clojure.java.io :as io]
+            [taoensso.timbre :as log])
+           )
 
 (def ^{:doc "A map of file extensions to mime-types."}
   default-mime-types
@@ -88,6 +90,7 @@
    "ttf"      "font/ttf"
    "txt"      "text/plain"
    "webm"     "video/webm"
+   "webp"     "image/webp"
    "wmv"      "video/x-ms-wmv"
    "woff"     "font/woff"
    "woff2"    "font/woff2"
@@ -115,10 +118,12 @@
    (let [mime-types (merge default-mime-types mime-types)]
      (mime-types (filename-ext filename)))))
 
-(defn serve-static
-  "Actual serving function that is used in the router"
-  [req]
-  (let [path (str/replace-first (:uri req) "/static/" "")]
-    {:headers {"Content-Type" (ext-mime-type (fs/file-name path))}
-     :body ((memoize slurp) (io/resource path))}))
-
+(defn serve-static [req]
+  (let [path (str/replace-first (:uri req) "/static/" "")
+        resource (io/resource path)]
+    (if resource
+      {:status 200
+       :headers {"Content-Type" (ext-mime-type (fs/file-name path))}
+       :body (io/input-stream resource)}
+      {:status 404
+       :body "Not found"})))

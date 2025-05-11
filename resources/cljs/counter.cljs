@@ -4,10 +4,14 @@
 (defn Counter []
   (let [[counter setCounter] (hooks/useState 0)]
     #jsx [:<>
-          [:div "Counter " counter]
-          [:div {:role "group" :class "btn-group"}
-           [:button {:class "btn btn-primary" :onClick #(setCounter (inc counter))} "+"]
-           [:button {:class "btn btn-primary" :onClick #(setCounter (dec counter))} "-"]]]))
+          [:div.text-lg.font-medium.mb-2 "Counter " counter]
+          [:div.flex.space-x-2
+           [:button {:class "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                     :onClick #(setCounter (inc counter))} "+"]
+           [:button {:class "bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700 transition"
+                     :onClick #(setCounter (dec counter))} "-"]]]
+    )
+  )
 
 (defonce el (js/document.getElementById "cljs"))
 

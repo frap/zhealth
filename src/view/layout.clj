@@ -15,57 +15,63 @@
 (defn paginator [req current-page pages base-url]
   (let* [q (:query-params req)
          next (when (not= current-page pages)
-                (str base-url "?"
-                     (r/query-params->url
-                      (merge q {"page" (+ current-page 1)}))))
+                (str base-url "?" (r/query-params->url (merge q {"page" (+ current-page 1)}))))
          previous (when (not= current-page 1)
-                    (str base-url "?"
-                         (r/query-params->url
-                          (merge q {"page" (- current-page 1)}))))]
-    [:div.d-flex.justify-content-center.mb-2
-     [:div.btn-group
-      [:a.btn.btn-primary
-       (if (nil? previous)
-         {:disabled true}
-         {:href previous}) "Previous"]
-      [:a.btn.btn-outline-primary {:href "#"} current-page " / " pages ]
-      [:a.btn.btn-primary
-       (if (nil? next)
-         {:disabled true}
-         {:href next}) "Next"]]]))
+                    (str base-url "?" (r/query-params->url (merge q {"page" (- current-page 1)}))))]
+    [:div.flex.justify-center.mb-4
+     [:div.flex.space-x-2
+      [:a {:class "px-4 py-2 rounded bg-cyan-500 text-white hover:bg-cyan-600 disabled:opacity-50"
+           :href (or previous "#")
+           :disabled (nil? previous)} "Previous"]
+      [:span.text-gray-600.text-sm.pt-2 (str current-page " / " pages)]
+      [:a {:class "px-4 py-2 rounded bg-cyan-500 text-white hover:bg-cyan-600 disabled:opacity-50"
+           :href (or next "#")
+           :disabled (nil? next)} "Next"]]]))
 
 (defn autocomplete-input [& {:keys [label name value list required]}]
-  [:div.mb-3
-   [:label.form-label label]
-   [:input.form-control {:type "input" :list (str name "list")
-            :name name :value value :required required
-            :autocomplete "off"}]
+  [:div.mb-4
+   [:label.block.text-sm.font-medium.text-gray-700 label]
+   [:input {:type "text"
+            :list (str name "list")
+            :name name
+            :value value
+            :required required
+            :autocomplete "off"
+            :class "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"}]
    [:datalist {:id (str name "list")}
     (map (fn [e] [:option {:value e}]) list)]])
 
-(defn form-input [& {:keys [id label type name value required]
-                     :as opts
-                     :or {required false}}]
+(defn form-input [& {:keys [id label type name value required] :as opts}]
   (cond
     (= type "textarea")
-    [:div.mb-3
-     [:label.form-label label]
-     [:textarea.form-control {:type type :name name :required required} value]]
+    [:div.mb-4
+     [:label.block.text-sm.font-medium.text-gray-700 label]
+     [:textarea {:name name
+                 :required required
+                 :class "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"} value]]
 
     (= type "autocomplete")
     (autocomplete-input opts)
 
     (= type "base64-upload")
-    [:div.mb-3
-     [:label.form-label label]
+    [:div.mb-4
+     [:label.block.text-sm.font-medium.text-gray-700 label]
      (c/cljs-module "base64-upload")
-     [:input.form-control {:type "file" :required required :onchange (str "base64_upload(\"" id "\", this)")}]
-     [:input {:type "hidden" :name name :id (if id id label)}]]
+     [:input {:type "file"
+              :required required
+              :onchange (str "base64_upload(\"" id "\", this)")
+              :class "mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-cyan-50 file:text-cyan-700 hover:file:bg-cyan-100"}]
+     [:input {:type "hidden" :name name :id (or id label)}]]
 
     :else
-    [:div.mb-3
-     [:label.form-label label]
-     [:input.form-control {:type type :value value :name name :required required}]]))
+    [:div.mb-4
+     [:label.block.text-sm.font-medium.text-gray-700 label]
+     [:input {:type type
+              :value value
+              :name name
+              :required required
+              :class "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-cyan-500 focus:ring-cyan-500"}]]))
+
 
 ;;
 ;; Extend importmap. This enables you to load other libraries in your
@@ -84,67 +90,122 @@
 
 (defn navbar [req]
   (let [user (s/current-user req)]
-    [:nav.navbar.sticky-top.navbar-expand-lg.navbar-bg-body-tertiary
-     [:div.container-fluid
-      [:a.navbar-brand.fw-bold {:href "/"} "bork·web"]
-      [:button.navbar-toggler {:type "button" :data-bs-toggle "collapse" :data-bs-target "#navbar"}
-       [:span.navbar-toggler-icon]]
-      [:div#navbar.collapse.navbar-collapse
-       (when (not user)
-         [:ul.navbar-nav
-          [:li.nav-item
-           [:a.nav-link {:href "/login"} "Login"]]
-          [:li.nav-item
-           [:a.nav-link {:href "/register"} "Register"]]
-          [:li.nav-item
-           [:a.nav-link {:href "/kitchensink"} "Kitchensink"]]])
-       (when user
-         [:ul.navbar-nav
-          [:li.nav-item
-           [:a.nav-link {:href "/profile"} "Profile"]]
-          [:li.nav-item
-           [:a.nav-link {:href "/logout"} "Logout"]]])]]]))
+    [:nav {:class "bg-zinc-50 shadow-md sticky top-0 z-50"}
+     [:div {:class "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"}
+      [:div {:class "flex justify-between h-16 items-center"}
+       ;; Logo
+       [:a {:href "/" :class "text-xl font-bold text-cyan-600"} "Z Health Yoga·Pilates"]
+        ;; Desktop links
+        [:div {:class "hidden sm:flex space-x-4"}
+         (if user
+           [:div
+            [:a {:href "/profile" :class "text-gray-700 hover:text-cyan-500"} "Profile"]
+            [:a {:href "/logout" :class "text-gray-700 hover:text-cyan-500"} "Logout"]]
+           [:div
+            [:a {:href "/login" :class "text-gray-700 hover:text-cyan-500"} "Login"]
+            [:a {:href "/register" :class "text-gray-700 hover:text-cyan-500"} "Register"]
+            [:a {:href "/kitchensink" :class "text-gray-700 hover:text-cyan-500"} "Classes"]])]
+
+        ;; Burger button
+       [:button {:class "sm:hidden text-gray-700 hover:text-cyan-600 focus:outline-none"
+                 ;; :onClick #(set-open (not open))
+                 }
+        [:svg {:class "h-6 w-6" :xmlns "http://www.w3.org/2000/svg" :fill "none" :viewBox "0 0 24 24" :stroke "currentColor"}
+         [:path {:strokeLinecap "round" :strokeLinejoin "round" :strokeWidth "2"
+                 :d                     ;;( if open
+                 "M6 18L18 6M6 6l12 12" ; X icon
+                 ;;"M4 6h16M4 12h16M4 18h16"
+                ;; )
+                 }]]]
+       ]]]))
+
+(defn navbar2 [req]
+  (let [user (s/current-user req)]
+    [:nav {:class "bg-zinc-50 shadow-md sticky top-0 z-50"}
+     [:div {:class "max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"}
+      [:div {:class "flex justify-between h-16 items-center"}
+
+       ;; Logo
+       [:a {:href "/" :class "text-xl font-bold text-cyan-600"} "Z Health Yoga·Pilates"]
+
+       ;; Mobile burger (input + label)
+       [:div {:class "sm:hidden"}
+        [:input {:id "menu-toggle" :type "checkbox" :class "hidden peer"}]
+        [:label {:for "menu-toggle"
+                 :class "cursor-pointer text-gray-700 hover:text-cyan-600"}
+         [:svg {:class "h-6 w-6" :fill "none" :viewBox "0 0 24 24" :stroke "currentColor"}
+          [:path {:strokeLinecap "round" :strokeLinejoin "round" :strokeWidth "2"
+                  :d "M4 6h16M4 12h16M4 18h16"}]]]]
+
+       ;; Desktop links
+       [:div {:class "hidden sm:flex space-x-6"}
+        [:div {:class "px-2 pt-2 pb-3 space-y-1"}
+         (if user
+           [:div
+            [:a {:href "/profile" :class "text-gray-700 hover:text-cyan-500"} "Profile"]
+            [:a {:href "/logout" :class "text-gray-700 hover:text-cyan-500"} "Logout"]]
+           [:div
+            [:a {:href "/login" :class "px-2 text-gray-700 hover:text-cyan-500"} "Login"]
+            [:a {:href "/register" :class "px-2 text-gray-700 hover:text-cyan-500"} "Register"]
+            [:a {:href "/kitchensink" :class "px-2 text-gray-700 hover:text-cyan-500"} "Classes"]])]
+        ]]]
+
+     ;; Mobile menu (shown when input is checked)
+     [:div {:class "sm:hidden peer-checked:max-h-60 max-h-0 overflow-hidden transition-all duration-300"}
+      [:div {:class "px-2 pt-2 pb-3 space-y-1"}
+       (if user
+         [:div
+          [:a {:href "/profile" :class "block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-cyan-100"} "Profile"]
+          [:a {:href "/logout" :class "block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-cyan-100"} "Logout"]]
+         [:div
+          [:a {:href "/login" :class "block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-cyan-100"} "Login"]
+          [:a {:href "/register" :class "block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-cyan-100"} "Register"]
+          [:a {:href "/kitchensink" :class "block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:bg-cyan-100"} "Classes"]])
+       ]]
+     ]))
 
 (defn alert [req]
   (let* [msg (get-in req [:flash :message])
          severity (:severity msg)
-         msg (:message msg)]
-    [:div.alert {:class (str "alert-" severity) :role "alert"}
-     msg]))
+         message (:message msg)
+         class (case severity
+                 "success" "bg-green-100 text-green-800"
+                 "warning" "bg-yellow-100 text-yellow-800"
+                 "danger"  "bg-red-100 text-red-800"
+                 "info"    "bg-blue-100 text-blue-800"
+                 "bg-zinc-50 text-slate-800")]
+    [:div {:class (str " rounded p-4 mb-4 " class) :role "alert"}
+     message]))
+
 
 (defn layout [req & body]
   (str
    (h/html
-       [:html
-        [:head
-         [:meta {:charset "utf-8"}]
-         [:meta {:name "viewport"
-                 :content "width=device-width, initial-scale=1"}]
-         [:link {:rel "manifest" :href "/manifest.json"}]
-         [:link {:href "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
-                 :rel "stylesheet"
-                 :integrity "sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
-                 :crossorigin "anonymous"}]
-         (global-importmap)
-         (c/cljs-module "register-sw")
-         (when hotreload?
-           (c/cljs-module "hotreload"))
-         [:style (h/raw sty/*style*)]]
-        [:body {:data-bs-theme "dark" :id "body"}
-         (hc/htmc)
-         (navbar req)
-         (alert req)
-         body
-         [:script {:src "https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-                   :integrity "sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
-                   :crossorigin "anonymous"}]]])))
+    [:html
+     [:head
+      [:meta {:charset "utf-8"}]
+      [:meta {:name "viewport"
+              :content "width=device-width, initial-scale=1"}]
+      [:link {:rel "manifest" :href "/manifest.json"}]
+      (global-importmap)
+      (c/cljs-module "register-sw")
+      (when hotreload?
+        (c/cljs-module "hotreload"))
+      [:script {:src "https://cdn.tailwindcss.com"}]
+      [:style (h/raw sty/*style*)]]
+     [:body.bg-zinc-50.text-slate-900.min-h-screen.flex.flex-col
+      (hc/htmc)
+      (navbar2 req)
+      [:div.flex-1.container.mx-auto.p-4
+       (alert req)
+       body]
+      ]])))
 
-(defn modal [& {:keys [id title content actions]}]
-  [:div.modal.fade {:tabindex -1 :id id}
-   [:div.modal-dialog
-    [:div.modal-content
-     [:div.modal-header
-      [:h5.modal-title title]
-      [:button.btn-close {:type "button" :data-bs-dismiss "modal"}]]
-     [:div.modal-body content]
-     [:div.modal-footer actions]]]])
+  (defn modal [& {:keys [id title content actions]}]
+    [:div.fixed.inset-0.bg-black.bg-opacity-50.flex.items-center.justify-center.z-50 {:id id}
+     [:div.bg-zinc-50.rounded-lg.shadow-lg.max-w-md.w-full
+      [:div.flex.justify-between.items-center.border-b.p-4
+       [:h5.text-lg.font-medium title]
+       [:button.text-gray-400.hover:text-gray-600 {:type "button" :onclick (str "document.getElementById('" id "').classList.add('hidden')")} "✕"]]
+      [:div.p-4 content]
+      [:div.flex.justify-end.space-x-2.p-4.border-t actions]]])
