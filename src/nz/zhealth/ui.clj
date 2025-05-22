@@ -21,7 +21,7 @@
    (-> ctx
        (merge #:base{:title settings/app-name
                      :lang "en-NZ"
-                     :description (str settings/app-name " Z Health")
+                     :description (str settings/app-name)
                      :image "/img/zhealth.png"})
        (update :base/head (fn [head]
                             (concat [[:link {:rel "stylesheet" :href (static-path "/css/main.css")}]
@@ -45,12 +45,12 @@
 (defn page [ctx & body]
   (base
    ctx
-   [:.flex-grow]
-   [:.p-3.mx-auto.max-w-screen-sm.w-full
-    (when (bound? #'csrf/*anti-forgery-token*)
-      {:hx-headers (cheshire/generate-string
-                    {:x-csrf-token csrf/*anti-forgery-token*})})
-    body]
+   [:.bg-green-50.flex.flex-col.flex-grow
+    [:.p-3.mx-auto.max-w-screen-sm.w-full
+     (when (bound? #'csrf/*anti-forgery-token*)
+       {:hx-headers (cheshire/generate-string
+                     {:x-csrf-token csrf/*anti-forgery-token*})})
+     body]]
    [:.flex-grow]
    [:.flex-grow]))
 

@@ -3,14 +3,11 @@
             [nz.zhealth.middleware :as mid]
             [nz.zhealth.ui :as ui]
             [nz.zhealth.settings :as settings]
-            [rum.core :as rum]
             [xtdb.api :as xt]
-            [ring.adapter.jetty9 :as jetty]
-            [cheshire.core :as cheshire]))
-
+            ))
 
 (defn app [{:keys [session biff/db] :as ctx}]
-  (let [{:user/keys [email foo bar]} (xt/entity db (:uid session))]
+  (let [{:user/keys [email]} (xt/entity db (:uid session))]
     (ui/page
      {}
      [:div "Signed in as " email ". "
@@ -31,7 +28,8 @@
     [:a.link {:href "https://biffweb.com"} "Biff"] "."]))
 
 
-(def module
-  {:static {"/about/" about-page}
-   :routes ["/app" {:middleware [mid/wrap-signed-in]}
-            ["" {:get app}]]})
+;; (def module
+;;   {:static {"/about/" about-page}
+;;    :routes ["/app" {:middleware [mid/wrap-signed-in]}
+;;             ["" {:get app}]]
+;;    })
