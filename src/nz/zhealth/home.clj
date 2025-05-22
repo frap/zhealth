@@ -99,20 +99,74 @@
       youtube-icon
       ]]]])
 
+(def carousel
+  [:section {:id "carousel"
+           :class "relative w-full overflow-hidden bg-gray-100 py-8 scroll-mt-16"}
+ [:div {:class "max-w-3xl mx-auto relative"}
+
+  ;; Carousel container
+  [:div {:class "relative w-full h-64 md:h-96 rounded-lg shadow-lg overflow-hidden"
+         :_ "
+          init
+            set my index to 0
+            set my slides to <.carousel-slide/> in me
+            every 4s
+              remove .opacity-100 from my slides
+              add .opacity-0 to my slides
+              add .opacity-100 to my slides[index]
+              remove .opacity-0 from my slides[index]
+              set index to (index + 1) mod slides.length
+          "}
+
+   ;; Carousel slides
+   [:img.carousel-slide {:src "/images/mat-kapitit.jpg"
+                         :alt "Childs Pose"
+                         :class "absolute w-full h-full object-cover transition-opacity duration-1000 opacity-100"}]
+   [:img.carousel-slide {:src "/images/namaste.jpg"
+                         :alt "Lotus"
+                         :class "absolute w-full h-full object-cover transition-opacity duration-1000 opacity-0"}]
+   [:img.carousel-slide {:src "/images/SwissBall.jpg"
+                         :alt "Swiss Ball"
+                         :class "absolute w-full h-full object-cover transition-opacity duration-1000 opacity-0"}]]
+
+  ;; Optional indicators (dots)
+  [:div {:class "absolute bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2"}
+   (for [_ (range 3)]
+     [:span {:class "w-3 h-3 bg-white rounded-full opacity-50"}])]]])
 
 (def about
   [:section {:id "about"
-             :class "min-h-screen scroll-mt-16 flex flex-col px-6 pt-8"}
-   [:h2 {:class "max-w-4xl text-3xl textmd:text-4xl font-bold text-center mb-8 text-zinc-800"} "About Z Health"]
-   [:p {:class "text-lg"} "We are a community-focused school based in Kāpiti offering a range of learning experiences for all ages."]
-   [:p {:class "text-lg"}
-    "Offering high quality classes specialising in Yoga, Pilates, Swiss Ball, and more in the heart of the Kāpiti Coast since 2012."]
-   [:img.object-contain.h-80 {:src "img/childpose-kapiti.webp"}]
-   [:p {:class "text-lg"}
-    "Zuri is the studio owner and award-winning teacher with over 30 years of experience.
-This includes qualifications in Exercise to Music, Aerobics, Step, Swiss Ball, Yoga, Zumba, Pilates, Yin Yoga,as well as Personal Training & Fitness Assessment.
-With her background in modern contemporary dance and a passion for health and fitness she has the energy and experience to support you on your well-being journey.
-A mother of three grown-up children, and now fit and fabulous in her 50’s she has a great understanding and empathy of juggling work, rest, and play in the modern world."]
+             :class "min-h-screen scroll-mt-16 flex flex-col px-6 pt-8 text-lg"}
+   [:h2 {:class "max-w-4xl text-3xl textmd:text-4xl font-bold text-center mb-8 text-zinc-800"} "🌿 About Z Health"]
+   [:p {:class "text-lg"} "Welcome to Z Health Studio — a calm and uplifting space guided by Zuri,
+an award-winning teacher with over thirty years of experience in the movement and wellness world."]
+   [:p "Zuri’s journey began in contemporary dance, and over the decades, she has embraced a wide range of practices
+including Aerobics, Step, Swiss Ball, Pilates, Yin Yoga, Zumba, and Personal Training.
+She is proudly registered with the NZ Register of Exercise Professionals, bringing both professionalism and heart
+to every class she teaches."]
+   [:p "As a mother of three and now vibrant in her fifties, Zuri understands the art of balance — between strength
+and stillness, work and rest, structure and flow. Her approach is grounded, compassionate, and deeply informed by her
+ lived experience."]
+   [:div {:class "flex flex-row mx-4"}
+    [:img.object-contain.w-48 {:src "img/childpose-kapiti.webp"}]
+    [:p {:class "italic mx-4"}
+     "“When I was younger, I loved the challenge of dance and high-energy exercise. But when I discovered yoga in
+1998, everything changed. I began to slow down, to soften, and to listen more deeply to my body. Pilates showed me
+the strength in stillness. And I learned that true wellness isn’t how you look — it’s how you feel inside.”"]]
+   [:p "In 2012, Zuri founded Z Health Studio with a simple dream: to offer mindful movement centred on breath, flow,
+and presence. Her classes gently guide you back to your own rhythm — helping you build strength, awareness, and ease
+in both body and mind."]
+   [:div {:class "flex flex-row mx-4"}
+    [:img.object-contain.h-48 {:src "img/yoga-teacher-of-year.webp"}]
+    [:div {:class "flex flex-col"}
+     [:p {:class "bold"}
+      "In 2021, she was honoured as Yoga Teacher of the Year — a reflection of her ability to meet people exactly where
+they are and support them with grace and encouragement."]
+     [:p
+    "Zuri believes we each hold a quiet power within us — a strength waiting to be remembered. At Z Health Studio,
+you are welcomed just as you are. Whether you’re seeking energy, calm, clarity, or connection,
+Zuri is here to support your journey toward a life of balance, vitality, and gentle joy."]
+     ]]
    ]
   )
 
@@ -126,33 +180,34 @@ A mother of three grown-up children, and now fit and fabulous in her 50’s she 
     instagram-icon
     youtube-icon]])
 
-  (def hero-section
-    [:sectiom {:id "hero"
-               :class "h-screen bg-no-repeat bg-cover bg-center bg-[url(/img/kapiti-1920.webp)] flex items-center justify-center text-white scroll-mt-16" }
-     [:div {:class "max-w-4xl bg-opacity-50 p-8 rounded"}
-      [:h1 {:class "text-3xl md:text-6xl font-bold mb-4 text-center"} "Find Your Kāpiti Flow"]
-      [:p {:class "text-lg md:text-xl text-center"} "Join our yoga community and grow with us."]]]
-    )
+(def hero-section
+  [:sectiom {:id "hero"
+             :class "h-screen bg-no-repeat bg-cover bg-center bg-[url(/img/kapiti-1920.webp)] flex items-center justify-center text-white scroll-mt-16" }
+   [:div {:class "max-w-4xl bg-opacity-50 p-8 rounded"}
+    [:h1 {:class "text-3xl md:text-6xl font-bold mb-4 text-center"} "Find Your Kāpiti Flow"]
+    [:p {:class "text-lg md:text-xl text-center"} "Join our yoga community and grow with us."]]]
+  )
 
 (def classes-section
  [:section {:id "classes"
             :class "px-4 py-12 scroll-mt-16 bg-gray-50 min-h-screen"}
-  [:div {:class "max-w-7xl mx-auto"}
+  [:div {:class "max-w-3xl mx-auto"}
+
    [:h2 {:class "text-3xl md:text-4xl font-bold text-center mb-8 text-zinc-800"}
-    "Class Schedule"]
+    "Class Timetable"]
    [:div {:class "grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6"}
 
     ;; Repeat for each day
-    (for [[day sessions] {"Mon" ["Vinyasa Flow" "Restorative"]
-                          "Tue" ["Hatha Yoga" "Yin Yoga"]
-                          "Wed" ["Power Yoga" "Gentle Flow"]
-                          "Thu" ["Ashtanga" "Prenatal"]
-                          "Fri" ["Morning Flow" "Sunset Stretch"]
-                          "Sat" ["Kids Yoga" "Partner Yoga"]}]
+    (for [[day sessions] {"Mon" ["Yin Yoga"]
+                          "Tue" ["Yogilates" "Yin Yoga"]
+                          "Wed" [ "Gentle Flow"]
+                          "Thu" ["Yogilates" ]
+                          "Fri" ["Yoga Flow" ]
+                          "Sat" ["Yin Yoga" "Pilates"]}]
       [:div {:class "bg-white rounded-lg shadow p-4 flex flex-col justify-between"}
        [:h3 {:class "text-xl font-semibold text-center mb-4"} day]
        (for [class sessions]
-         [:div {:class "bg-blue-100 text-blue-900 rounded px-3 py-2 mb-2 text-center font-medium shadow-sm"}
+         [:div {:class "bg-green-100 text-green-900 rounded px-3 py-2 mb-2 text-center font-medium shadow-sm"}
           class])])]]])
 
 (def navbar
