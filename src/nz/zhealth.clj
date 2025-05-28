@@ -15,7 +15,7 @@
   (:gen-class))
 
 (def modules
-  [app/module
+  [ ;; app/module
    (biff/authentication-module {})
    home/module
    schema/module])
@@ -70,13 +70,13 @@
 
 (defn start []
   (let [new-system (reduce (fn [system component]
-                             (log/info "starting:" (str component))
+                             (log/info "Starting:" (str component))
                              (component system))
                            initial-system
                            components)]
     (reset! system new-system)
     (generate-assets! new-system)
-    (log/info "System started.")
+    (log/info "ZHealth started.")
     (log/info "Go to" (:biff/base-url new-system))
     new-system))
 
@@ -86,7 +86,7 @@
 
 (defn refresh []
   (doseq [f (:biff/stop @system)]
-    (log/info "stopping:" (str f))
+    (log/info "Stopping:" (str f))
     (f))
   (tn-repl/refresh :after `start)
   :done)
