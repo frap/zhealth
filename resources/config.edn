@@ -48,7 +48,7 @@
 
  ;; The version of the Taliwind standalone bin to install. See `clj -M:dev css -h`. If you change
  ;; this, run `rm bin/tailwindcss; clj -M:dev install-tailwind`.
- :biff.tasks/tailwind-version       "v3.4.17"
+ :biff.tasks/tailwind-version       "v4.0.0"
 
  ;; :rsync is the default if rsync is on the path; otherwise :git is the default. Set this to :git
  ;; if you have rsync on the path but still want to deploy with git.
