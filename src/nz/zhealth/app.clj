@@ -21,11 +21,11 @@
      [:div "ZHealth start."])
     ))
 
-(def about-page
-  (ui/page
-   {:base/title (str "About " settings/app-name)}
-   [:p "This app was made with "
-    [:a.link {:href "https://biffweb.com"} "Biff"] "."]))
+;; (def about-page
+;;   (ui/page
+;;    {:base/title (str "About " settings/app-name)}
+;;    [:p "This app was made with "
+;;     [:a.link {:href "https://biffweb.com"} "Biff"] "."]))
 
 
 ;; (def module
