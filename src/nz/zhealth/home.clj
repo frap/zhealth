@@ -60,7 +60,7 @@
   [:a
    {:href "mailto:zuri@zhealth.nz"
     :aria-label "Email"
-    :class "w-9 h-9 rounded-full bg-black/40 hover:bg-orange-600/80 flex justify-center items-center  transform transition-transform duration-200 hover:scale-110"}
+    :class "w-9 h-9 rounded-full bg-black/40 hover:bg-orange-600/80 flex justify-center items-center transform transition-transform duration-200 hover:scale-110"}
    [:svg {:xmlns "http://www.w3.org/2000/svg"
           :viewBox "0 0 24 24"
           :fill "currentColor"
@@ -116,7 +116,10 @@
 (def sticky-footer
   [:footer {:class "sticky bottom-0 w-full bg-gray-50 dark:bg-zinc-900 text-green-800 dark:text-green-300 shadow-inner py-4 mt-12"}
    [:div {:class "max-w-5xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0"}
-    [:p {:class "text-center md:text-left"} "© 2025 Z Health"]
+    [:p {:class "text-center md:text-left flex items-center"}
+     [:span "© 2025"]
+     [:img {:src "/img/zhealth_logo.webp" :alt "Z Health Logo" :class "h-9 mx-2 -mt-[4px]"}]
+     ]
     [:div {:class "flex justify-center md:justify-end space-x-4 flex-wrap"}
      email-icon
      facebook-icon
@@ -207,9 +210,11 @@
   [:section {:id "hero"
              :class "min-h-screen bg-no-repeat bg-cover bg-center bg-[url(/img/kapiti-1920.webp)] flex text-center justify-center text-zinc-200 dark:text-zinc-500 scroll-mt-16" }
    [:div {:class "max-w-5xl bg-opacity-50 p-8 rounded"}
-    [:h1 {:class "text-2xl md:text-6xl font-bold mb-8 pt-30 justify-center text-white"} "“In " [:em "stillness"] " we find " [:em {:class "animate-fade-in"} "strength"] "“"]
+    [:h1 {:class "text-2xl md:text-6xl font-bold mb-8 pt-30 justify-center text-white"} "“In " [:em "stillness,"] " we find " [:em {:class "animate-fade-in"} "strength"] "“"]
     [:p {:class "text-lg md:text-xl text-center text-white"} "Join our vibrant Kāpiti community — with Yoga, Pilates, and a peaceful space rooted in nature’s calm."]
-    [:p {:class "text-lg md:text-xl text-center text-white animate-fade-in"} "since 2012"]]]
+    [:div {:class "flex justify-center text-center"}
+     [:p {:class "text-lg md:text-xl  text-white animate-fade-in"} "since 2012"]]
+     [:img {:src "img/zhealth-wwatermark.webp" :class "rounded h-16 mx-auto "}]]]
   )
 
 (defn class-block [title desc details img-src]
@@ -237,8 +242,8 @@
              :class "px-4 py-12 scroll-mt-16 bg-gray-50 dark:bg-zinc-900 min-h-screen"}
    [:div {:class "max-w-5xl mx-auto"}
 
-     [:div {:class "flex flex-col md:flex-row md:items-center md:justify-between"}
-      [:h2 {:class "w-full md:w-2/3 text-3xl md:text-4xl font-bold text-center mb-8 text-green-800 dark:text-green-300"}
+     [:div {:class "flex flex-col md:flex-row md:items-center md:justify-between mb-4"}
+      [:h2 {:class "w-full md:w-2/3 text-3xl md:text-4xl font-bold text-center md:text-left text-green-800 dark:text-green-300"}
        "Z Health Classes"]
       book-a-class]
 
@@ -292,13 +297,13 @@
 
 (def timetable
   [:section {:id "timetable"
-             :class "px-4 py-12 scroll-mt-16 bg-gray-50 dark:bg-zinc-900 min-h-screen bg-no-repeat bg-contain bg-center bg-[url(/img/fish-zen.webp)]"}
+             :class "px-4 py-12 scroll-mt-16 bg-gray-50 dark:bg-zinc-900 min-h-screen"} ;;bg-no-repeat bg-contain bg-center bg-[url(/img/fish-zen.webp)]
    [:div {:class "max-w-5xl mx-auto"}
 
-   [:div {:class "flex flex-col md:flex-row md:items-center md:justify-between mb-8"}
-    [:h2 {:class "text-3xl md:text-4xl font-bold text-center  text-green-800 dark:text-green-300"}
-     "Class Timetable"]
-    book-a-class]
+    [:div {:class "flex flex-col md:flex-row md:items-center md:justify-between mb-4"}
+     [:h2 {:class "text-3xl md:text-4xl font-bold text-center md:text-left text-green-800 dark:text-green-300"}
+      "Class Timetable"]
+     book-a-class]
 
     ;; Table view for md+ screens
     [:div {:class "hidden md:block overflow-x-auto"}
@@ -341,6 +346,9 @@
            [:div {:class "text-sm text-green-800 dark:text-green-300 font-semibold"} time]
            [:div {:class "text-base font-medium dark:text-white"} class]
            [:div {:class "text-sm italic text-gray-600 dark:text-gray-400"} location]])])]
+
+    [:div {:class "flex justify-center mt-4"}
+    [:img {:src "/img/zhealth_logo.webp" :alt "Z Health" :class "rounded-lg shadow-lg w-full max-w-xs"}]]
     ]])
 
 (defn home [ctx]
