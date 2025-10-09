@@ -117,8 +117,8 @@
   [:footer {:class "sticky bottom-0 w-full bg-gray-50 dark:bg-zinc-900 text-green-800 dark:text-green-300 shadow-inner py-4 mt-12"}
    [:div {:class "max-w-5xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0"}
     [:p {:class "text-center md:text-left flex items-center"}
-     [:span "© 2025"]
-     [:img {:src "/img/zhealth_logo.webp" :alt "Z Health Logo" :class "h-9 mx-2 -mt-[4px]"}]
+     [:span {:class "italic text-sm"} "since 2012"]
+     [:img {:src "/img/zhealth_logo.webp" :alt "Z Health Logo" :class "h-8 mx-2 -mt-[4px]"}]
      ]
     [:div {:class "flex justify-center md:justify-end space-x-4 flex-wrap"}
      email-icon
