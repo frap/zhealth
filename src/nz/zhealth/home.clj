@@ -206,7 +206,7 @@
      ]
      ;; --- Newsletter block at the end ---
     [:section  {:class "flex justify-center mt-12 mb-24"}
-     
+
      ;; Wrap just the teaser paragraph so we can overwrite it
                [:div {:id "newsletter-teaser"}
                      [:a {:href "/mailchimp-form" ;; real URL fallback'
@@ -217,7 +217,7 @@
                                 :hx-swap "outerHTML" ;; overwrite the teaser entirely
                                 :hx-push-url "false"} ;; don’t change the URL
                       ;; Visible text in whatever case you want to “match the PDF”
-                         "Click here to join the Community Newsletter!"]
+                         "Click here to join our Community Newsletter!"]
                      ]
      ;; If you prefer to load the form elsewhere instead, keep this:
      ;; [:div {:id "newsletter-signup"}]
@@ -252,7 +252,7 @@
   [:a {:href "https://bookings.gettimely.com/zhealthstudio/bb/book"
      :target "_blank"
      :rel "noopener noreferrer"
-     :class "inline-block self-center md:self-end px-2 py-2 md:mt-0 md:mb-0 mb-8 bg-emerald-200 font-semibold text-lg rounded-xl shadow-md hover:bg-emerald-700 transition-colors duration-300"}
+     :class "inline-block self-center md:self-end px-2 py-2 md:mt-0 md:mb-0 mb-8 font-semibold text-lg rounded-xl shadow-md bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 transition-colors duration-300 text-white"}
    "Book class here!"])
 
 (def classes-section
@@ -343,11 +343,11 @@
          [:tr
           [:td {:class "p-2 border text-green-900 dark:text-green-100 font-semibold text-sm md:text-base"} time]
           (for [slot slots]
-            [:td {:class "p-2 border dark:border-green-700"}
-             (when (vector? slot)
-               [:div {:class "bg-green-700 dark:bg-green-800 text-white text-center font-medium px-2 py-1 rounded shadow-sm"}
-                [:div {:class "text-sm md:text-base"} (first slot)]
-                [:div {:class "text-xs italic text-gray-200"} (second slot)]])])])]]]
+               [:td {:class "p-2 border dark:border-green-700"}
+                    (when (vector? slot)
+                      [:div {:class "bg-green-700 dark:bg-green-800 text-white text-center font-medium px-2 py-1 rounded shadow-sm"}
+                            [:div {:class "text-sm md:text-base"} (first slot)]
+                            [:div {:class "text-xs italic text-gray-200"} (second slot)]])])])]]]
 
     ;; Mobile stacked layout by day
     [:div {:class "md:hidden space-y-6"}
@@ -391,4 +391,3 @@
    [ ["/"               {:get home}]
      ["/mailchimp-form" {:get chimp/mailchimp-form-handler}]
      ["/ping"           {:get (fn [_] {:status 200 :headers {"content-type" "text/plain; charset=utf-8"} :body "pong"})}] ]})
-
