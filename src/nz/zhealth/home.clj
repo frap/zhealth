@@ -1,6 +1,6 @@
 (ns nz.zhealth.home
   (:require [nz.zhealth.ui :as ui]
-            [nz.zhealth.mailchimp :refer [mailchimp-form]]
+            [nz.zhealth.mailchimp :as chimp]
 ))
 
 (def facebook-icon
@@ -203,24 +203,26 @@
        [:span {:class "font-semibold"} "In 2021, she was honoured as Yoga Teacher of the Year"] " — a reflection of her deeply personal and supportive approach. Her students describe her as intuitive, kind, and inspiring — someone who truly listens and meets people where they are."]
       [:p
        "Zuri is passionate about giving you the space to reconnect with your own internal power and physical strength as she guides you through this journey. Zuri believes that, like her, we can all live a life of balance, pleasure, and strength through learning how to prioritise our wellbeing and value the fluidity of movement."]]
-     ]]
-   [:section
-     [:h3  {:class "text-2xl md:text-3xl font-bold text-center mb-12 text-green-800 dark:text-green-300"}
-           "Community Newsletter"]
-     [:div {:class "flex flex-col md:flex-row gap-6 mb-12 text-gray-600 dark:text-gray-400"}
-      [:p {:class "mb-4"} "Click "
-       [:a {:href "#"
-         :class "text-green-700 underline hover:text-green-900"
-         :hx-get "/mailchimp-form"
-         :hx-target "#newsletter-signup"
-         :hx-swap "innerHTML"}
-     "here"]
-       " to sign up for community newsletter"]]
-
-      ;; This is where the form will load dynamically with HTMX
-     [:div {:id "newsletter-signup"}]
      ]
-   ])
+     ;; --- Newsletter block at the end ---
+    [:section  {:class "flex justify-center mt-12 mb-24"}
+     
+     ;; Wrap just the teaser paragraph so we can overwrite it
+               [:div {:id "newsletter-teaser"}
+                     [:a {:href "/mailchimp-form" ;; real URL fallback'
+                                :class "inline-block self-center md:self-end px-6 py-3 text-xl rounded-2xl md:mt-0 md:mb-0 mb-8 font-semibold shadow-md bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 transition-colors duration-300 text-white"
+                                :aria-label "Load Mailchimp signup form"
+                                :hx-get "/mailchimp-form" ;; or "/mail-chimp-form" if you prefer
+                                :hx-target "#newsletter-teaser" ;; replace this container
+                                :hx-swap "outerHTML" ;; overwrite the teaser entirely
+                                :hx-push-url "false"} ;; don’t change the URL
+                      ;; Visible text in whatever case you want to “match the PDF”
+                         "Click here to join the Community Newsletter!"]
+                     ]
+     ;; If you prefer to load the form elsewhere instead, keep this:
+     ;; [:div {:id "newsletter-signup"}]
+     ]]
+    ])
 
 (def hero-section
   [:section {:id "hero"
@@ -229,7 +231,7 @@
     [:h1 {:class "text-2xl md:text-6xl font-bold mb-8 pt-30 justify-center text-white"} "“In " [:em "stillness,"] " we find " [:em {:class "animate-fade-in"} "strength"] "“"]
     [:p {:class "text-lg md:text-xl text-center text-white"} "Join our vibrant Kāpiti community — with Yoga, Pilates, and a peaceful space rooted in nature’s calm."]
     [:div {:class "flex justify-center text-center"}
-     [:p {:class "text-lg md:text-xl  text-white animate-fade-in"} "since 2012"]]
+     [:p {:class "text-lg md:text-xl text-white animate-fade-in"} "since 2012"]]
      [:img {:src "img/zhealth-wwatermark.webp" :class "rounded h-16 mx-auto "}]]]
   )
 
@@ -254,62 +256,62 @@
    "Book class here!"])
 
 (def classes-section
-  [:section {:id "classes"
-             :class "px-4 py-12 scroll-mt-16 bg-gray-50 dark:bg-zinc-900 min-h-screen"}
-   [:div {:class "max-w-5xl mx-auto"}
+     [:section {:id "classes"
+                    :class "px-4 py-12 scroll-mt-16 bg-gray-50 dark:bg-zinc-900 min-h-screen"}
+               [:div {:class "max-w-5xl mx-auto"}
 
-     [:div {:class "flex flex-col md:flex-row md:items-center md:justify-between mb-4"}
-      [:h2 {:class "w-full md:w-2/3 text-3xl md:text-4xl font-bold text-center md:text-left text-green-800 dark:text-green-300"}
-       "Z Health Classes"]
-      book-a-class]
+                     [:div {:class "flex flex-col md:flex-row md:items-center md:justify-between mb-4"}
+                           [:h2 {:class "w-full md:w-2/3 text-3xl md:text-4xl font-bold text-center md:text-left text-green-800 dark:text-green-300"}
+                                "Z Health Classes"]
+                           book-a-class]
 
-    ;; Each class block
-    (class-block
-     "Yin Yoga"
-     "Yin Yoga is “the other half” of yoga. A slow-paced practice with long-held asanas to stimulate the fascia and release deep-seated tension, de-stressing the mind and re-energizing the soul. Suitable for all levels."
-     ["Online only!"]
-     "img/childs-pose.webp")
+                ;; Each class block
+                     (class-block
+                      "Yin Yoga"
+                      "Yin Yoga is “the other half” of yoga. A slow-paced practice with long-held asanas to stimulate the fascia and release deep-seated tension, de-stressing the mind and re-energizing the soul. Suitable for all levels."
+                      ["Online only!"]
+                      "img/childs-pose.webp")
 
-    (class-block
-     "Yoga Flow"
-     "A dynamic yoga practice aiming to rejuvenate the body and free the mind from tension and fatigue. Serves as an introduction to traditional forms of Yoga through physical postures."
-     ["Every Saturday 8.45am – 9.45am"
-      "Raumati South Memorial Hall, Tennis Court Rd"]
-     "img/warrior.webp")
+                     (class-block
+                      "Yoga Flow"
+                      "A dynamic yoga practice aiming to rejuvenate the body and free the mind from tension and fatigue. Serves as an introduction to traditional forms of Yoga through physical postures."
+                      ["Every Saturday 8.45am – 9.45am"
+                       "Raumati South Memorial Hall, Tennis Court Rd"]
+                      "img/warrior.webp")
 
-    (class-block
-     "Pilates"
-     "The Classical Pilates mat practice is a unique sequence of exercises designed by Joseph Pilates, incorporating dynamic moves to tone and strengthen the whole body while improving postural alignment and flexibility."
-     ["Every Saturday 10am – 10.45am"
-      "Raumati South Memorial Hall, Tennis Court Rd"]
-     "img/pilates.webp")
+                     (class-block
+                      "Pilates"
+                      "The Classical Pilates mat practice is a unique sequence of exercises designed by Joseph Pilates, incorporating dynamic moves to tone and strengthen the whole body while improving postural alignment and flexibility."
+                      ["Every Saturday 10am – 10.45am"
+                       "Raumati South Memorial Hall, Tennis Court Rd"]
+                      "img/pilates.webp")
 
-    (class-block
-     "Yogilates"
-     "Ideal for those new to Yoga and/or Pilates. Introduces basic Pilates principles and incorporates Yoga postures and breath to reconnect the mind, body, and soul."
-     ["Please bring a mat and/or blanket – blocks and bolsters are provided!"
-      "Every Tuesday & Thursday 9.30am – 10.30am"
-      "Paraparaumu Memorial Hall, Aorangi Road, Paraparaumu"]
-     "img/childs-pose-kapiti.webp")
+                     (class-block
+                      "Yogilates"
+                      "Ideal for those new to Yoga and/or Pilates. Introduces basic Pilates principles and incorporates Yoga postures and breath to reconnect the mind, body, and soul."
+                      ["Please bring a mat and/or blanket – blocks and bolsters are provided!"
+                       "Every Tuesday & Thursday 9.30am – 10.30am"
+                       "Paraparaumu Memorial Hall, Aorangi Road, Paraparaumu"]
+                      "img/childs-pose-kapiti.webp")
 
-    (class-block
-     "Swiss Ball"
-     "Enhances core strength, joint, and spine stability. The constant adjustments required on the ball help in tuning into internal sensations, making it suitable for those returning to exercise from injury or as part of rehabilitation."
-     ["Private bookings available on request!"]
-     "img/swiss-ball.webp")
+                     (class-block
+                      "Swiss Ball"
+                      "Enhances core strength, joint, and spine stability. The constant adjustments required on the ball help in tuning into internal sensations, making it suitable for those returning to exercise from injury or as part of rehabilitation."
+                      ["Private bookings available on request!"]
+                      "img/swiss-ball.webp")
 
-    (class-block
-     "Personal Yoga/Pilates Practice"
-     "Available online (via Zoom) or in-person at a private studio in Raumati South, Kāpiti Coast."
-     ["30mins / 40mins / 1hr sessions – appointments on request"]
-     "img/yoga-teacher-of-year.webp")
+                     (class-block
+                      "Personal Yoga/Pilates Practice"
+                      "Available online (via Zoom) or in-person at a private studio in Raumati South, Kāpiti Coast."
+                      ["30mins / 40mins / 1hr sessions – appointments on request"]
+                      "img/yoga-teacher-of-year.webp")
 
-    (class-block
-     "Guided Meditation"
-     "Available online (via Zoom) or in-person at a private studio in Raumati South, Kāpiti Coast."
-     ["30mins / 40mins / 1hr sessions – appointments on request"]
-     "img/fish-zen-sq.webp")
-    ]])
+                     (class-block
+                      "Guided Meditation"
+                      "Available online (via Zoom) or in-person at a private studio in Raumati South, Kāpiti Coast."
+                      ["30mins / 40mins / 1hr sessions – appointments on request"]
+                      "img/fish-zen-sq.webp")
+                     ]])
 
 (def timetable
   [:section {:id "timetable"
@@ -385,6 +387,8 @@
   )
 
 (def module
-  {:routes [["/" {:get home}]
-            ["mailchimp-form" {:get (mailchimp-form)}]
-            ]})
+  {:routes
+   [ ["/"               {:get home}]
+     ["/mailchimp-form" {:get chimp/mailchimp-form-handler}]
+     ["/ping"           {:get (fn [_] {:status 200 :headers {"content-type" "text/plain; charset=utf-8"} :body "pong"})}] ]})
+

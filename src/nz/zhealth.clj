@@ -19,10 +19,14 @@
    home/module
    schema/module])
 
+(defn gather [k]
+  ;; Collect and flatten only present route vectors
+  (mapcat identity (keep k modules)))
+
 (def routes [["" {:middleware [mid/wrap-site-defaults]}
-              (keep :routes modules)]
+              (gather :routes)]
              ["" {:middleware [mid/wrap-api-defaults]}
-              (keep :api-routes modules)]])
+              (gather :api-routes)]])
 
 (def handler (-> (biff/reitit-handler {:routes routes})
                  mid/wrap-base-defaults))
