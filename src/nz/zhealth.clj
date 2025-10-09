@@ -1,7 +1,6 @@
 (ns nz.zhealth
   (:require [com.biffweb :as biff]
             [nz.zhealth.email :as email]
-            [nz.zhealth.app :as app]
             [nz.zhealth.home :as home]
             [nz.zhealth.middleware :as mid]
             [nz.zhealth.ui :as ui]

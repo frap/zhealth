@@ -20,7 +20,7 @@
    :base/lang "en-NZ"
    :base/icon "/favicon.ico"
    :base/url "https://zhealth.nz"
-   :base/description "Z Health offers yoga, pilates, and wellness classes in the heart of Kāpiti. Join us for strength, stillness, and community."
+   :base/description "Z Health offers Yoga, Pilates, and Wellness classes in the heart of Kāpiti. Join us for strength, stillness, and community."
    :base/image "/img/zhealth.png"})
 
 (defn local-business-jsonld []
