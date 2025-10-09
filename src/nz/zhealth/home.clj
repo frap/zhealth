@@ -1,5 +1,6 @@
 (ns nz.zhealth.home
   (:require [nz.zhealth.ui :as ui]
+            [nz.zhealth.mailchimp :refer [mailchimp-form]]
 ))
 
 (def facebook-icon
@@ -12,7 +13,6 @@
           :class "h-6 w-6 text-zinc-100"}
     [:path {:d "M22 12a10 10 0 10-11.6 9.87v-6.99h-2.2V12h2.2V9.84c0-2.18 1.3-3.4 3.29-3.4.95 0 1.94.17 1.94.17v2.13h-1.09c-1.07 0-1.4.66-1.4 1.33V12h2.38l-.38 2.88h-2v6.99A10 10 0 0022 12z",
             :fill "currentColor" }]]])
-
 
 (def instagram-icon
   [:a
@@ -180,8 +180,8 @@
 
     [:div {:class "flex flex-col md:flex-row gap-6 mb-12 text-gray-600 dark:text-gray-400"}
      [:div {:class "md:w-1/3 flex justify-center"}
-      [:img {:src "img/childs-pose-kapiti.webp"
-             :alt "Zuri in child pose"
+      [:img {:src "img/namaste.webp"
+             :alt "Zuri Namaste"
              :class "rounded-lg shadow-lg max-w-xs"}]]
      [:div {:class "md:w-2/3"}
       [:p {:class "mb-4"}
@@ -204,6 +204,22 @@
       [:p
        "Zuri is passionate about giving you the space to reconnect with your own internal power and physical strength as she guides you through this journey. Zuri believes that, like her, we can all live a life of balance, pleasure, and strength through learning how to prioritise our wellbeing and value the fluidity of movement."]]
      ]]
+   [:section
+     [:h3  {:class "text-2xl md:text-3xl font-bold text-center mb-12 text-green-800 dark:text-green-300"}
+           "Community Newsletter"]
+     [:div {:class "flex flex-col md:flex-row gap-6 mb-12 text-gray-600 dark:text-gray-400"}
+      [:p {:class "mb-4"} "Click "
+       [:a {:href "#"
+         :class "text-green-700 underline hover:text-green-900"
+         :hx-get "/mailchimp-form"
+         :hx-target "#newsletter-signup"
+         :hx-swap "innerHTML"}
+     "here"]
+       " to sign up for community newsletter"]]
+
+      ;; This is where the form will load dynamically with HTMX
+     [:div {:id "newsletter-signup"}]
+     ]
    ])
 
 (def hero-section
@@ -369,4 +385,6 @@
   )
 
 (def module
-  {:routes [["/" {:get home}]]})
+  {:routes [["/" {:get home}]
+            ["mailchimp-form" {:get (mailchimp-form)}]
+            ]})
