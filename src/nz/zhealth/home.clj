@@ -118,14 +118,14 @@
    [:div {:class "max-w-5xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0"}
     [:p {:class "text-center md:text-left flex items-center"}
      [:span {:class "italic text-sm"} "since 2012"]
-     [:img {:src "/img/zhealth_logo.webp" :alt "Z Health Logo" :class "h-8 mx-2 -mt-[4px]"}]
-     ]
+     [:img {:src "/img/zhealth_logo.webp" :alt "Z Health Logo" :class "h-8 mx-2 -mt-[4px]"}]]
     [:div {:class "flex justify-center md:justify-end space-x-4 flex-wrap"}
-     email-icon
-     facebook-icon
-     instagram-icon
-     youtube-icon
-     phone-icon]]])
+     ;; [:span {:class "text-sm italic " } "contact buttons:"]
+          email-icon
+          facebook-icon
+          instagram-icon
+          youtube-icon
+          phone-icon]]])
 
 (def carousel
   [:section {:id "carousel"
@@ -329,17 +329,18 @@
       [:thead {:class "bg-green-100 dark:bg-green-900"}
        [:tr
         [:th {:class "p-2 border text-left text-green-900 dark:text-green-100 text-sm md:text-base"} "Time"]
-        (for [day ["Monday" "Tuesday" "Thursday" "Saturday"]]
-          [:th {:class "p-2 border text-center text-green-900 dark:text-green-100 text-sm md:text-base"} day])]]
+        (for [day ["Monday" "Tuesday" "Wednesday" "Thursday" "Saturday"]]
+             [:th {:class "p-2 border text-center text-green-900 dark:text-green-100 text-sm md:text-base"} day])]]
       [:tbody
        (for [[time slots]
-             [["8.45am" ["", "", "", ["Yoga Flow" "Raumati South Memorial Hall"]]]
+             [["8.45am" ["", "", "","", ["Yoga Flow" "Raumati South Memorial Hall"]]]
               ["9.30am" ["",
-                         ["Yogilates" "Paraparaumu Memorial Hall (+ online)"],
-                         ["Yogilates" "Paraparaumu Memorial Hall (+ online)"],
+                         ["Yogilates (online)" "Paraparaumu Memorial Hall "], "",
+                         ["Yogilates (online)" "Paraparaumu Memorial Hall"],
                          ""]]
-              ["10am" ["", "", "", ["Pilates" "Raumati South Memorial Hall"]]]
-              ["6pm" [["Yin Yoga" "(online)"], "", "", ""]]]]
+              ["10am" ["", "", "", "", ["Pilates" "Raumati South Memorial Hall"]]]
+              ["5:45pm" ["", "", ["Pilates Method" "Raumati South Memorial Hall"], "", "" ]]
+              ["6pm" [["Yin Yoga" "(online)"], "", "", "", ""]]]]
          [:tr
           [:td {:class "p-2 border text-green-900 dark:text-green-100 font-semibold text-sm md:text-base"} time]
           (for [slot slots]
@@ -354,6 +355,7 @@
      (for [[day entries]
            {"Monday" [["6pm" "Yin Yoga" "(online)"]]
             "Tuesday" [["9.30am" "Yogilates" "Paraparaumu Memorial Hall (+ online)"]]
+            "Wednesday" [["5:45pm" "Pilates Method" "Raumati South Memorial Hall"]]
             "Thursday" [["9.30am" "Yogilates" "Paraparaumu Memorial Hall (+ online)"]]
             "Saturday" [["8.45am" "Yoga Flow" "Raumati South Memorial Hall"]
                         ["10am" "Pilates" "Raumati South Memorial Hall"]]}]
