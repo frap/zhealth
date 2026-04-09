@@ -339,7 +339,7 @@
                          ["Yogilates (online)" "Paraparaumu Memorial Hall"],
                          ""]]
               ["10am" ["", "", "", "", ["Pilates" "Raumati South Memorial Hall"]]]
-              ["5:45pm" ["", "", ["Pilates Method" "Raumati South Memorial Hall"], "", "" ]]
+              ["5:15pm" ["", "", ["Pilates Method" "Raumati South Memorial Hall"], "", "" ]]
               ["6pm" [["Yin Yoga" "(online)"], "", "", "", ""]]]]
          [:tr
           [:td {:class "p-2 border text-green-900 dark:text-green-100 font-semibold text-sm md:text-base"} time]
@@ -355,7 +355,7 @@
      (for [[day entries]
            {"Monday" [["6pm" "Yin Yoga" "(online)"]]
             "Tuesday" [["9.30am" "Yogilates" "Paraparaumu Memorial Hall (+ online)"]]
-            "Wednesday" [["5:45pm" "Pilates Method" "Raumati South Memorial Hall"]]
+            "Wednesday" [["5:15pm" "Pilates Method" "Raumati South Memorial Hall"]]
             "Thursday" [["9.30am" "Yogilates" "Paraparaumu Memorial Hall (+ online)"]]
             "Saturday" [["8.45am" "Yoga Flow" "Raumati South Memorial Hall"]
                         ["10am" "Pilates" "Raumati South Memorial Hall"]]}]
