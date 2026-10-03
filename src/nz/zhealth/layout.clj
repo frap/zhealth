@@ -2,45 +2,64 @@
   (:require [hyper.core :as h]
             [nz.zhealth.components :as c]))
 
-(defn navbar [req]
-  [:nav
-   {:class "fixed inset-x-0 top-0 z-50 h-16 bg-gray-50/95 dark:bg-zinc-900/95 shadow"}
+(def nav-items
+  [[:why "Why Zhealth?"]
+   [:timetable "Timetable"]
+   [:classes "Yoga Styles"]
+   [:about "About Zuri"]])
 
-   [:div
-    {:class "h-full max-w-5xl mx-auto px-4 flex items-center justify-between"}
+;; below navbar = 4 rem = h-16
+(defn navbar [_req]
+  (let [menu-open?* (h/local-signal :menu-open false)]
+    [:nav {:class "fixed inset-x-0 top-0 z-50 h-16 bg-gray-50/95 dark:bg-zinc-900/95 shadow backdrop-blur"}
 
-    [:a
-     (merge
-      (h/navigate :home)
-      {:class "flex items-center gap-3 text-green-800 dark:text-green-300"})
-     [:img {:src "/img/zhealth.svg"
-            :class "h-8"
-            :alt "Z Health"}]
-     [:span {:class "font-bold"}
-      "Yoga & Pilates with Zuri"]]
+     [:div {:class "h-full max-w-5xl mx-auto px-4 flex items-center justify-between"}
 
-    [:div
-     {:class "hidden md:flex gap-6"}
+      ;; Branding
+      [:a (merge (h/navigate :home)
+                 {:class "flex min-w-0 items-center gap-3 text-green-800 dark:text-green-300"})
+       [:img {:src "/img/zhealth.svg"
+              :alt "Z Health"
+              :class "h-8 w-auto shrink-0"}]
 
-     [:a (merge
-          (h/navigate :why)
-          {:class "hover:underline"})
-      "Why ZHealth?"]
+       ;; Smaller text on phones avoids collisions with hamburger
+       [:span {:class "truncate text-base sm:text-lg md:text-xl font-bold hover:text-blue-500"}
+        "Yoga & Pilates with Zuri"]]
 
-     [:a (merge
-          (h/navigate :timetable)
-          {:class "hover:underline"})
-      "Timetable"]
+      ;; Desktop navigation
+      [:div {:class "hidden md:flex items-center gap-6 text-green-800 dark:text-green-300"}
+       (for [[route label] nav-items]
+         [:a (merge (h/navigate route)
+                    {:class "hover:text-blue-500 hover:underline"})
+          label])]
 
-     [:a (merge
-          (h/navigate :classes)
-          {:class "hover:underline"})
-      "Classes"]
+      ;; Mobile menu button
+      [:button {:type "button"
+                :class "md:hidden shrink-0 p-2 rounded hover:bg-gray-200 dark:hover:bg-zinc-800"
+                :aria-label "Toggle menu"
+                :aria-controls "mobile-menu"
+                :data-on:click (str @menu-open?* " = !" @menu-open?*)}
+       [:svg {:xmlns "http://www.w3.org/2000/svg"
+              :fill "none"
+              :viewBox "0 0 24 24"
+              :stroke-width "1.5"
+              :stroke "currentColor"
+              :class "w-6 h-6 text-green-800 dark:text-green-300"}
+        [:path {:stroke-linecap "round"
+                :stroke-linejoin "round"
+                :d "M3.75 5.25h16.5m-16.5 6h16.5m-16.5 6h16.5"}]]]]
 
-     [:a (merge
-          (h/navigate :about)
-          {:class "hover:underline"})
-      "About Zuri"]]]])
+     ;; Mobile dropdown; close it after navigating
+     [:div {:id "mobile-menu"
+            :class "md:hidden absolute top-16 inset-x-0 bg-gray-50 dark:bg-zinc-900 shadow-lg border-t border-gray-200 dark:border-zinc-800"
+            :style "display:none"
+            :data-show @menu-open?*}
+      [:ul {:class "px-4 py-4 space-y-1 text-green-800 dark:text-green-300"}
+       (for [[route label] (cons [:home "Home"] nav-items)]
+         [:li [:a (merge (h/navigate route)
+                         {:class "block p-3"
+                          :data-on:click (str @menu-open?* " = false")})
+               label]])]]]))
 
 (defn page-layout [req content]
   [:div
@@ -48,7 +67,15 @@
 
    (navbar req)
 
-   [:main {:class "pt-16"}
+   [:main {:id "main"
+           :class "pt-16"}
     content]
 
-   (c/site-footer)])
+   c/site-footer])
+
+(defn not-found [req]
+  (page-layout
+   req
+   [:section {:class "px-4 py-24 text-center text-green-800 dark:text-green-300"}
+    [:h1 {:class "text-3xl font-bold mb-4"} "Page not found"]
+    [:a (merge (h/navigate :home) {:class "link"}) "Back to the home page"]]))

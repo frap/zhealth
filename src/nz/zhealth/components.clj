@@ -1,4 +1,6 @@
-(ns nz.zhealth.components)
+(ns nz.zhealth.components
+  (:require [hyper.core :as h]
+            [nz.zhealth.mailchimp :as chimp]))
 
 (def social-icon-class
   (str
@@ -132,7 +134,8 @@
        :alt "Swiss Ball"
        :class "carousel-slide"}]]]])
 
-(def about
+(defn about []
+  (let [newsletter?* (h/local-signal :newsletter false)]
   [:section {:id "about"
              :class "scroll-mt-16 px-4 py-12 bg-gray-50 dark:bg-zinc-900"}
    [:div {:class "max-w-5xl mx-auto"}
@@ -175,20 +178,19 @@
      ;; --- Newsletter block at the end ---
     [:section  {:class "flex justify-center mt-12 mb-24"}
 
-     ;; Wrap just the teaser paragraph so we can overwrite it
-     [:div {:id "newsletter-teaser"}
-      [:a {:href "/mailchimp-form" ;; real URL fallback'
-           :class "inline-block self-center md:self-end px-6 py-3 text-xl rounded-2xl md:mt-0 md:mb-0 mb-8 font-semibold shadow-md bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 transition-colors duration-300 text-white"
-           :aria-label "Load Mailchimp signup form"
-           :hx-get "/mailchimp-form" ;; or "/mail-chimp-form" if you prefer
-           :hx-target "#newsletter-teaser" ;; replace this container
-           :hx-swap "outerHTML" ;; overwrite the teaser entirely
-           :hx-push-url "false"} ;; don’t change the URL
-                      ;; Visible text in whatever case you want to “match the PDF”
+     ;; Teaser button swaps itself for the signup form (client-side signal)
+     [:div {:id "newsletter-teaser"
+            :data-show (str "!" @newsletter?*)}
+      [:button {:type "button"
+                :class "inline-block self-center md:self-end px-6 py-3 text-xl rounded-2xl md:mt-0 md:mb-0 mb-8 font-semibold shadow-md bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 transition-colors duration-300 text-white"
+                :aria-label "Show Mailchimp signup form"
+                :data-on:click (str @newsletter?* " = true")}
        "Click here to join our Community Newsletter!"]]
-     ;; If you prefer to load the form elsewhere instead, keep this:
-     ;; [:div {:id "newsletter-signup"}]
-     ]]])
+     [:div {:id "newsletter-signup"
+            :class "w-full"
+            :style "display:none"
+            :data-show @newsletter?*}
+      chimp/mailchimp-form]]]]))
 
 (def hero-section
   [:section

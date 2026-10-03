@@ -6,4 +6,4 @@
 (defn page [req]
   (layout/page-layout
    req
-   c/about))
+   (c/about)))

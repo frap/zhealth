@@ -1,0 +1,21 @@
+{:tasks
+ {:init (do (def tailwind "bin/tailwindcss")
+            (def css-in "resources/tailwind.css")
+            (def css-out "target/resources/public/css/main.css"))
+
+  css       {:doc  "Compile and minify Tailwind CSS"
+             :task (shell tailwind "-i" css-in "-o" css-out "--minify")}
+
+  css-watch {:doc  "Recompile Tailwind CSS on change"
+             :task (shell tailwind "-i" css-in "-o" css-out "--watch")}
+
+  dev       {:doc     "Start an nREPL with dev/user.clj loaded; run (go) to start the server"
+             :depends [css]
+             :task    (clojure "-M:dev:nrepl")}
+
+  uber      {:doc     "Build target/zhealth.jar"
+             :depends [css]
+             :task    (clojure "-T:build uber")}
+
+  serve     {:doc  "Run the uberjar locally (PORT defaults to 3000)"
+             :task (shell "java -jar target/zhealth.jar")}}}
