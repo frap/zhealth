@@ -1,0 +1,31 @@
+profile: zhealth
+workdir: .colors
+compute-api-version: 2
+
+provider-compute: vultr
+provider-backend: r2
+provider-smtp: resend
+# DNS for zhealth.nz is managed by hand; point the A record at the new
+# server's IP at cutover.
+provider-dns: no-infra
+compute-prevent-destroy: true
+
+# Sydney is Vultr's closest region to NZ. 2 GB leaves room for Docker,
+# ONCE and the JVM; 2284 is Ubuntu 24.04 LTS x64.
+vultr-region: syd
+vultr-plan: vc2-1c-2gb
+vultr-os-id: 2284
+
+# TCP 22 and TCP 80/443. Narrow SSH to your own CIDR if practical.
+compute-ssh-sources: [0.0.0.0/0]
+compute-http-sources: [0.0.0.0/0]
+
+# Existing R2 bucket for OpenTofu state (must exist before create).
+r2-bucket: REPLACE-tofu-state-bucket
+r2-endpoint: https://REPLACE-ACCOUNT-ID.r2.cloudflarestorage.com
+
+once:
+  applications:
+    - host: zhealth.nz
+      image: ghcr.io/frap/zhealth:latest
+      github: frap/zhealth

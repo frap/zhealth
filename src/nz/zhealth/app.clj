@@ -42,7 +42,16 @@
      :get (fn [_]
             {:status 200
              :headers {"content-type" "text/plain; charset=utf-8"}
-             :body "pong"})}]])
+             :body "pong"})}]
+
+   ;; Healthcheck required by ONCE
+   ["/up"
+    {:name :up
+     :hyper/disabled? true
+     :get (fn [_]
+            {:status 200
+             :headers {"content-type" "text/plain; charset=utf-8"}
+             :body "ok"})}]])
 
 (def handler
   (h/create-handler

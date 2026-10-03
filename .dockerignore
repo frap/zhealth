@@ -1,3 +1,13 @@
 .git
-node_modules
+.github
 .cpcache
+.clj-kondo
+.lsp
+.nrepl-port
+bin
+deploy
+dev
+node_modules
+storage
+target
+config.env
