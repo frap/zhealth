@@ -1,35 +1,57 @@
 (ns nz.zhealth.app
-  (:require [com.biffweb :as biff :refer [q]]
-            [nz.zhealth.middleware :as mid]
-            [nz.zhealth.ui :as ui]
-            [nz.zhealth.settings :as settings]
-            [xtdb.api :as xt]
-            ))
+  (:require
+   [hyper.core :as h]
+   [nz.zhealth.pages.home :as home]
+   [nz.zhealth.pages.why :as why]
+   [nz.zhealth.pages.classes :as classes]
+   [nz.zhealth.pages.timetable :as timetable]
+   [nz.zhealth.pages.about :as about]))
 
-(defn app [{:keys [session biff/db] :as ctx}]
-  (let [{:user/keys [email]} (xt/entity db (:uid session))]
-    (ui/page
-     {}
-     [:div "Signed in as " email ". "
-      (biff/form
-       {:action "/auth/signout"
-        :class "inline"}
-       [:button.text-blue-500.hover:text-blue-800 {:type "submit"}
-        "Sign out"])
-      "."]
-     [:.h-6]
-     [:div "ZHealth start."])
-    ))
+(def head
+  [[:meta {:name "description"
+           :content "Z Health offers Yoga, Pilates, and Wellness classes in the heart of Kāpiti."}]
 
-;; (def about-page
-;;   (ui/page
-;;    {:base/title (str "About " settings/app-name)}
-;;    [:p "This app was made with "
-;;     [:a.link {:href "https://biffweb.com"} "Biff"] "."]))
+   [:link {:rel "stylesheet"
+           :href "/css/main.css"}]
 
+   [:link {:rel "icon"
+           :href "/favicon.ico"}]
 
-;; (def module
-;;   {:static {"/about/" about-page}
-;;    :routes ["/app" {:middleware [mid/wrap-signed-in]}
-;;             ["" {:get app}]]
-;;    })
+   [:meta {:name "theme-color"
+           :content "#0d9488"}]])
+
+(def routes
+  [["/"
+    {:name :home
+     :title "Z Health"
+     :get #'home/page}]
+
+   ["/why"
+    {:name :why
+     :title "Why Z Health?"
+     :get #'why/page}]
+
+   ["/classes"
+    {:name :classes
+     :title "Classes | Z Health"
+     :get #'classes/page}]
+
+   ["/timetable"
+    {:name :timetable
+     :title "Timetable | Z Health"
+     :get #'timetable/page}]
+
+   ["/about"
+    {:name :about
+     :title "About | Z Health"
+     :get #'about/page}]])
+
+(def handler
+  (h/create-handler
+   #'routes
+   :static-resources "public"
+   :head #'head))
+
+(defonce server
+  (h/start! handler {:port 3000}))
+
