@@ -1,7 +1,6 @@
 (ns nz.zhealth.ui
   (:require [cheshire.core :as cheshire]
             [clojure.java.io :as io]
-            [nz.zhealth.settings :as settings]
             [com.biffweb :as biff]
             [ring.middleware.anti-forgery :as csrf]
             [ring.util.response :as ring-response]
@@ -28,7 +27,7 @@
     [:script {:type "application/ld+json"}
      (cheshire/generate-string
       {"@context" "https://schema.org"
-       "@type" "YogaandPilatesBusiness"
+       "@type" "SportsActivityLocation"
        "@id" url
        "name" title
        "image" (str url image)
@@ -40,9 +39,8 @@
                   "postalCode" "5032"
                   "addressCountry" "NZ"}
        "openingHours" ["Mo-Fr 07:00-10:00" "Sa 08:45-11:00"]
-       "priceRange"  "<$-$$>"
-       "acceptsReservations" "True"})]))
-
+       "priceRange"  "$"
+       "acceptsReservations" true})]))
 
 (defn base [{:keys [::recaptcha] :as ctx} & body]
   (apply
@@ -74,17 +72,17 @@
                              head))))
    body))
 
-  (defn page [ctx & body]
-    (base
-     ctx
-     [:.bg-green-50.flex.flex-col.flex-grow
-      [:.p-3.mx-auto.max-w-screen-sm.w-full
-       (when (bound? #'csrf/*anti-forgery-token*)
-         {:hx-headers (cheshire/generate-string
-                       {:x-csrf-token csrf/*anti-forgery-token*})})
-       body]]
-     [:.flex-grow]
-     [:.flex-grow]))
+(defn page [ctx & body]
+  (base
+   ctx
+   [:.bg-green-50.flex.flex-col.flex-grow
+    [:.p-3.mx-auto.max-w-screen-sm.w-full
+     (when (bound? #'csrf/*anti-forgery-token*)
+       {:hx-headers (cheshire/generate-string
+                     {:x-csrf-token csrf/*anti-forgery-token*})})
+     body]]
+   [:.flex-grow]
+   [:.flex-grow]))
 
 (defn on-error [{:keys [status ex] :as ctx}]
   {:status status
