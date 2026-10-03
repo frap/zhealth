@@ -89,10 +89,7 @@
    [:div {:class "h-full max-w-5xl mx-auto px-4 flex items-center justify-between"}
 
     ;; Branding
-    [:a {:href "#hero"
-         :hx-get "/#hero"
-         :hx-target "#main"
-         :hx-swap "innerHTML"
+    [:a {:href "/"
          :class "flex min-w-0 items-center gap-3 text-green-800 dark:text-green-300"}
      [:img {:src "/img/zhealth.svg"
             :alt "Z Health"
@@ -104,26 +101,21 @@
 
     ;; Desktop navigation
     [:div {:class "hidden md:flex items-center gap-6 text-green-800 dark:text-green-300"}
-     [:a {:href "#why"
-          :hx-get "/#why"
-          :hx-target "#main"
-          :hx-swap "innerHTML"
+     [:a {:href "/why"
           :class "hover:text-blue-500 hover:underline"}
       "Why Zhealth?"]
 
-     [:a {:href "#timetable"
-          :hx-get "/#timetable"
-          :hx-target "#main"
-          :hx-swap "innerHTML"
+     [:a {:href "/timetable"
           :class "hover:text-blue-500 hover:underline"}
       "Timetable"]
 
-     [:a {:href "#about"
-          :hx-get "/#about"
-          :hx-target "#main"
-          :hx-swap "innerHTML"
+     [:a {:href "/classes"
           :class "hover:text-blue-500 hover:underline"}
-      "About"]]
+      "Yoga Styles"]
+
+     [:a {:href "/about"
+          :class "hover:text-blue-500 hover:underline"}
+      "About Zuri"]]
 
     ;; Mobile menu button
     [:button {:type "button"
@@ -144,21 +136,13 @@
    ;; Mobile dropdown
    [:div {:id "mobile-menu"
           :class "hidden md:hidden absolute top-16 inset-x-0 bg-gray-50 dark:bg-zinc-900 shadow-lg border-t border-gray-200 dark:border-zinc-800"}
-    [:ul {:class "max-w-5xl mx-auto px-4 py-4 space-y-1 text-green-800 dark:text-green-300"}
-
-     (for [[label target]
-           [["Home" "#hero"]
-            ["Classes" "#classes"]
-            ["Timetable" "#timetable"]
-            ["About" "#about"]]]
-       [:li
-        [:a {:href target
-             :hx-get (str "/" target)
-             :hx-target "#main"
-             :hx-swap "innerHTML"
-             :class "block rounded px-3 py-3 hover:bg-gray-100 dark:hover:bg-zinc-800 hover:text-blue-500"
-             :_ "on click add .hidden to #mobile-menu"}
-         label]])]]])
+    [:ul {:class "px-4 py-4 space-y-1"}
+     [:li [:a {:href "/" :class "block p-3"} "Home"]]
+     [:li [:a {:href "/why" :class "block p-3"} "Why Zhealth?"]]
+     [:li [:a {:href "/timetable" :class "block p-3"} "Timetable"]]
+     [:li [:a {:href "/classes" :class "block p-3"} "Yoga Styles"]]
+     [:li [:a {:href "/about" :class "block p-3"} "About Zuri"]]]
+    [:ul {:class "max-w-5xl mx-auto px-4 py-4 space-y-1 text-green-800 dark:text-green-300"}]]])
 
 (def site-footer
   [:footer
@@ -433,9 +417,10 @@
      "img/childs-pose-kapiti.webp")
 
     (class-block
-     "Guided Meditation"
-     "Available online (via Zoom) or in-person at a private studio in Raumati South, Kāpiti Coast."
-     []
+     "Online Yoga &  Meditation"
+     "Can't make it to a class?"
+     ["Join me from home with online practices designed to help you move, stretch, breathe and relax."
+      "check out my YouTube free classes"]
      "img/fish-zen-sq.webp")]])
 
 (def why-zhealth
@@ -525,10 +510,11 @@
            [:div {:class "text-base font-medium dark:text-white"} class]
            [:div {:class "text-sm italic text-gray-600 dark:text-gray-400"} location]])])]
 
-    [:div {:class "flex justify-center mt-4"}
-     [:img {:src "/img/zhealth_logo.webp" :alt "Z Health" :class "rounded-lg shadow-lg w-full max-w-xs"}]]]])
+    ;; [:div {:class "flex justify-center mt-4"}
+    ;;  [:img {:src "/img/zhealth_logo.webp" :alt "Z Health" :class "rounded-lg shadow-lg w-full max-w-xs"}]]
+    ]])
 
-(defn home [ctx]
+(defn page-layout [ctx content]
   (ui/base
    ctx
    [:body
@@ -538,17 +524,39 @@
 
     [:main {:id "main"
             :class "pt-16"}
-     hero-section
-    ;; carousel
-     classes-section
-     why-zhealth
-     timetable
-     about]
+     content]
 
     site-footer]))
 
+(defn home-page [ctx]
+  (page-layout
+   ctx
+   [:<>
+    hero-section
+    carousel]))
+
+(defn classes-page [ctx]
+  (page-layout ctx classes-section))
+
+(defn why-page [ctx]
+  (page-layout ctx why-zhealth))
+
+(defn timetable-page [ctx]
+  (page-layout ctx timetable))
+
+(defn about-page [ctx]
+  (page-layout ctx about))
+
 (def module
   {:routes
-   [["/"               {:get home}]
+   [["/"               {:get home-page}]
+    ["/classes"        {:get classes-page}]
+    ["/why"            {:get why-page}]
+    ["/timetable"      {:get timetable-page}]
+    ["/about"          {:get about-page}]
     ["/mailchimp-form" {:get chimp/mailchimp-form-handler}]
-    ["/ping"           {:get (fn [_] {:status 200 :headers {"content-type" "text/plain; charset=utf-8"} :body "pong"})}]]})
+    ["/ping"           {:get (fn [_]
+                               {:status 200
+                                :headers {"content-type"
+                                          "text/plain; charset=utf-8"}
+                                :body "pong"})}]]})
