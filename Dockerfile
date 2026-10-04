@@ -1,46 +1,43 @@
-# The default deploy instructions (https://biffweb.com/docs/reference/production/) don't
-# use Docker, but this file is provided in case you'd like to deploy with containers.
+# ONCE-compatible image: serves HTTP on port 80 with a healthcheck at /up.
 #
-# When running the container, make sure you set any environment variables defined in config.env,
-# e.g. using whatever tools your deployment platform provides for setting environment variables.
-#
-# Run these commands to test this file locally:
-#
-#   docker build -t your-app .
-#   docker run --rm -e BIFF_PROFILE=dev -v $PWD/config.env:/app/config.env your-app
+#   docker build -t zhealth .
+#   docker run --rm -p 8080:80 zhealth
 
-# This is the base builder image, construct the jar file in this one
-# it uses alpine for a small image
-FROM clojure:temurin-21-tools-deps-alpine AS jre-build
+FROM clojure:temurin-21-tools-deps-bookworm-slim AS build
 
-ENV TAILWIND_VERSION=v3.2.4
+ARG TARGETARCH
+ARG TAILWIND_VERSION=v4.0.0
 
-# Install the missing packages and applications in a single layer
-RUN apk add curl rlwrap && curl -L -o /usr/local/bin/tailwindcss \
-  https://github.com/tailwindlabs/tailwindcss/releases/download/$TAILWIND_VERSION/tailwindcss-linux-x64 \
-  && chmod +x /usr/local/bin/tailwindcss
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends curl ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
+RUN case "$TARGETARCH" in arm64) tw=arm64 ;; *) tw=x64 ;; esac \
+ && curl -fsSL -o /usr/local/bin/tailwindcss \
+      "https://github.com/tailwindlabs/tailwindcss/releases/download/${TAILWIND_VERSION}/tailwindcss-linux-${tw}" \
+ && chmod +x /usr/local/bin/tailwindcss
 
 WORKDIR /app
+
+# Resolve dependencies in their own layer so source edits don't refetch them
+COPY deps.edn build.clj ./
+RUN clojure -P && clojure -T:build clean
+
 COPY src ./src
-COPY dev ./dev
 COPY resources ./resources
-COPY deps.edn .
 
-# construct the application jar
-RUN clj -M:dev uberjar && cp target/jar/app.jar . && rm -r target
+RUN tailwindcss -i resources/tailwind.css -o target/resources/public/css/main.css --minify \
+ && clojure -T:build uber
 
-# This stage (see multi-stage builds) is a bare Java container
-# copy over the uberjar from the builder image and run the application
-FROM eclipse-temurin:21-alpine
+FROM eclipse-temurin:21-jre
+
+# Links the GHCR package to the (public) repo so it can inherit visibility
+LABEL org.opencontainers.image.source=https://github.com/frap/zhealth
+
 WORKDIR /app
+COPY --from=build /app/target/zhealth.jar /app/zhealth.jar
 
-# Take the uberjar from the base image and put it in the final image
-COPY --from=jre-build /app/app.jar /app/app.jar
+ENV PORT=80
+EXPOSE 80
 
-EXPOSE 8080
-
-# By default, run in PROD profile
-ENV BIFF_PROFILE=prod
-ENV HOST=0.0.0.0
-ENV PORT=8080
-CMD ["/opt/java/openjdk/bin/java", "-XX:-OmitStackTraceInFastThrow", "-XX:+CrashOnOutOfMemoryError", "-jar", "app.jar"]
+CMD ["java", "-XX:-OmitStackTraceInFastThrow", "-XX:+CrashOnOutOfMemoryError", "-Xmx192m", "-jar", "/app/zhealth.jar"]

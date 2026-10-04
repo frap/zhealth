@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "package-once-green": {
+      "source": "getcolors/once",
+      "sourceType": "github",
+      "skillPath": "skills/package-once-green/SKILL.md",
+      "computedHash": "0f2d37b7612854f1c11c173065ca270fdb9bcd999af4daf777ab5f9a3692d59e"
+    }
+  }
+}

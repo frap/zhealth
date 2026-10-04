@@ -1,5 +1,5 @@
-(ns nz.zhealth.home
-  (:require [nz.zhealth.ui :as ui]
+(ns nz.zhealth.components
+  (:require [hyper.core :as h]
             [nz.zhealth.mailchimp :as chimp]))
 
 (def social-icon-class
@@ -33,7 +33,7 @@
     :target "_blank"
     :rel "noopener noreferrer"
     :aria-label "Instagram"
-    :class (str social-icon-class  "hover:bg-pink-800/80")}
+    :class (str social-icon-class " hover:bg-pink-800/80")}
    [:svg
     {:class "w-[1.25rem] h-[1.125rem] text-white",
      :viewBox "0 0 15 15",
@@ -43,13 +43,15 @@
      {:d "M4.70975 7.93663C4.70975 6.65824 5.76102 5.62163 7.0582 5.62163C8.35537 5.62163 9.40721 6.65824 9.40721 7.93663C9.40721 9.21502 8.35537 10.2516 7.0582 10.2516C5.76102 10.2516 4.70975 9.21502 4.70975 7.93663ZM3.43991 7.93663C3.43991 9.90608 5.05982 11.5025 7.0582 11.5025C9.05658 11.5025 10.6765 9.90608 10.6765 7.93663C10.6765 5.96719 9.05658 4.37074 7.0582 4.37074C5.05982 4.37074 3.43991 5.96719 3.43991 7.93663ZM9.97414 4.22935C9.97408 4.39417 10.0236 4.55531 10.1165 4.69239C10.2093 4.82946 10.3413 4.93633 10.4958 4.99946C10.6503 5.06259 10.8203 5.07916 10.9844 5.04707C11.1484 5.01498 11.2991 4.93568 11.4174 4.81918C11.5357 4.70268 11.6163 4.55423 11.649 4.39259C11.6817 4.23095 11.665 4.06339 11.6011 3.91109C11.5371 3.7588 11.4288 3.6286 11.2898 3.53698C11.1508 3.44536 10.9873 3.39642 10.8201 3.39635H10.8197C10.5955 3.39646 10.3806 3.48424 10.222 3.64043C10.0635 3.79661 9.97434 4.00843 9.97414 4.22935ZM4.21142 13.5892C3.52442 13.5584 3.15101 13.4456 2.90286 13.3504C2.57387 13.2241 2.33914 13.0738 2.09235 12.8309C1.84555 12.588 1.69278 12.3569 1.56527 12.0327C1.46854 11.7882 1.3541 11.4201 1.32287 10.7431C1.28871 10.0111 1.28189 9.79119 1.28189 7.93669C1.28189 6.08219 1.28927 5.86291 1.32287 5.1303C1.35416 4.45324 1.46944 4.08585 1.56527 3.84069C1.69335 3.51647 1.84589 3.28513 2.09235 3.04191C2.3388 2.79869 2.57331 2.64813 2.90286 2.52247C3.1509 2.42713 3.52442 2.31435 4.21142 2.28358C4.95417 2.24991 5.17729 2.24319 7.0582 2.24319C8.9391 2.24319 9.16244 2.25047 9.90582 2.28358C10.5928 2.31441 10.9656 2.42802 11.2144 2.52247C11.5434 2.64813 11.7781 2.79902 12.0249 3.04191C12.2717 3.2848 12.4239 3.51647 12.552 3.84069C12.6487 4.08513 12.7631 4.45324 12.7944 5.1303C12.8285 5.86291 12.8354 6.08219 12.8354 7.93669C12.8354 9.79119 12.8285 10.0105 12.7944 10.7431C12.7631 11.4201 12.6481 11.7881 12.552 12.0327C12.4239 12.3569 12.2714 12.5882 12.0249 12.8309C11.7784 13.0736 11.5434 13.2241 11.2144 13.3504C10.9663 13.4457 10.5928 13.5585 9.90582 13.5892C9.16306 13.6229 8.93994 13.6296 7.0582 13.6296C5.17645 13.6296 4.95395 13.6229 4.21142 13.5892ZM4.15307 1.03424C3.40294 1.06791 2.89035 1.18513 2.4427 1.3568C1.9791 1.53408 1.58663 1.77191 1.19446 2.1578C0.802277 2.54369 0.56157 2.93108 0.381687 3.38797C0.207498 3.82941 0.0885535 4.3343 0.0543922 5.07358C0.0196672 5.81402 0.0117188 6.05074 0.0117188 7.93663C0.0117188 9.82252 0.0196672 10.0592 0.0543922 10.7997C0.0885535 11.539 0.207498 12.0439 0.381687 12.4853C0.56157 12.9419 0.802334 13.3297 1.19446 13.7155C1.58658 14.1012 1.9791 14.3387 2.4427 14.5165C2.89119 14.6881 3.40294 14.8054 4.15307 14.839C4.90479 14.8727 5.1446 14.8811 7.0582 14.8811C8.9718 14.8811 9.212 14.8732 9.96332 14.839C10.7135 14.8054 11.2258 14.6881 11.6737 14.5165C12.137 14.3387 12.5298 14.1014 12.9219 13.7155C13.3141 13.3296 13.5543 12.9419 13.7347 12.4853C13.9089 12.0439 14.0284 11.539 14.062 10.7997C14.0962 10.0587 14.1041 9.82252 14.1041 7.93663C14.1041 6.05074 14.0962 5.81402 14.062 5.07358C14.0278 4.33424 13.9089 3.82913 13.7347 3.38797C13.5543 2.93135 13.3135 2.5443 12.9219 2.1578C12.5304 1.7713 12.137 1.53408 11.6743 1.3568C11.2258 1.18513 10.7135 1.06735 9.96388 1.03424C9.21256 1.00058 8.97236 0.992188 7.05876 0.992188C5.14516 0.992188 4.90479 1.00002 4.15307 1.03424Z",
       :fill "currentColor"}]]])
 
+(def youtube-url "https://www.youtube.com/@zhealthstudio9803")
+
 (def youtube-icon
   [:a
-   {:href "https://youtube.com/@zhealthstudio9803"
+   {:href youtube-url
     :target "_blank"
     :rel "noopener noreferrer"
     :aria-label "YouTube"
-    :class (str social-icon-class "hover:bg-rose-600/80")}
+    :class (str social-icon-class " hover:bg-rose-600/80")}
    [:svg {:class "w-[1.25rem] h-[0.875rem] text-white",
           :viewBox "0 0 16 12",
           :fill "none",
@@ -64,7 +66,7 @@
   [:a
    {:href "mailto:zuri@zhealth.nz"
     :aria-label "Email"
-    :class (str social-icon-class "hover:bg-orange-600/80")}
+    :class (str social-icon-class " hover:bg-orange-600/80")}
    [:svg {:xmlns "http://www.w3.org/2000/svg"
           :viewBox "0 0 24 24"
           :fill "currentColor"
@@ -75,74 +77,12 @@
   [:a
    {:href "tel:+64211315510"
     :aria-label "Phone"
-    :class (str social-icon-class "hover:bg-yellow-400/80")}
+    :class (str social-icon-class " hover:bg-yellow-400/80")}
    [:svg {:xmlns "http://www.w3.org/2000/svg"
           :viewBox "0 0 24 24"
           :fill "currentColor"
           :class "h-6 w-6 text-white"}
     [:path {:d "M2.25 4.5a.75.75 0 0 1 .75-.75h3.246a.75.75 0 0 1 .735.606l.768 3.84a.75.75 0 0 1-.21.705L6.25 10.94a12.005 12.005 0 0 0 6.81 6.81l1.038-1.29a.75.75 0 0 1 .705-.21l3.84.768a.75.75 0 0 1 .606.735V21a.75.75 0 0 1-.75.75H19.5A16.5 16.5 0 0 1 3 5.25V4.5z"}]]])
-
-;; below navbar = 4 rem = h-16
-(def fixed-navbar
-  [:nav {:class "fixed inset-x-0 top-0 z-50 h-16 bg-gray-50/95 dark:bg-zinc-900/95 shadow backdrop-blur"}
-
-   [:div {:class "h-full max-w-5xl mx-auto px-4 flex items-center justify-between"}
-
-    ;; Branding
-    [:a {:href "/"
-         :class "flex min-w-0 items-center gap-3 text-green-800 dark:text-green-300"}
-     [:img {:src "/img/zhealth.svg"
-            :alt "Z Health"
-            :class "h-8 w-auto shrink-0"}]
-
-     ;; Smaller text on phones avoids collisions with hamburger
-     [:span {:class "truncate text-base sm:text-lg md:text-xl font-bold hover:text-blue-500"}
-      "Yoga & Pilates with Zuri"]]
-
-    ;; Desktop navigation
-    [:div {:class "hidden md:flex items-center gap-6 text-green-800 dark:text-green-300"}
-     [:a {:href "/why"
-          :class "hover:text-blue-500 hover:underline"}
-      "Why Zhealth?"]
-
-     [:a {:href "/timetable"
-          :class "hover:text-blue-500 hover:underline"}
-      "Timetable"]
-
-     [:a {:href "/classes"
-          :class "hover:text-blue-500 hover:underline"}
-      "Yoga Styles"]
-
-     [:a {:href "/about"
-          :class "hover:text-blue-500 hover:underline"}
-      "About Zuri"]]
-
-    ;; Mobile menu button
-    [:button {:type "button"
-              :class "md:hidden shrink-0 p-2 rounded hover:bg-gray-200 dark:hover:bg-zinc-800"
-              :aria-label "Toggle menu"
-              :aria-controls "mobile-menu"
-              :_ "on click toggle .hidden on #mobile-menu"}
-     [:svg {:xmlns "http://www.w3.org/2000/svg"
-            :fill "none"
-            :viewBox "0 0 24 24"
-            :stroke-width "1.5"
-            :stroke "currentColor"
-            :class "w-6 h-6 text-green-800 dark:text-green-300"}
-      [:path {:stroke-linecap "round"
-              :stroke-linejoin "round"
-              :d "M3.75 5.25h16.5m-16.5 6h16.5m-16.5 6h16.5"}]]]]
-
-   ;; Mobile dropdown
-   [:div {:id "mobile-menu"
-          :class "hidden md:hidden absolute top-16 inset-x-0 bg-gray-50 dark:bg-zinc-900 shadow-lg border-t border-gray-200 dark:border-zinc-800"}
-    [:ul {:class "px-4 py-4 space-y-1"}
-     [:li [:a {:href "/" :class "block p-3"} "Home"]]
-     [:li [:a {:href "/why" :class "block p-3"} "Why Zhealth?"]]
-     [:li [:a {:href "/timetable" :class "block p-3"} "Timetable"]]
-     [:li [:a {:href "/classes" :class "block p-3"} "Yoga Styles"]]
-     [:li [:a {:href "/about" :class "block p-3"} "About Zuri"]]]
-    [:ul {:class "max-w-5xl mx-auto px-4 py-4 space-y-1 text-green-800 dark:text-green-300"}]]])
 
 (def site-footer
   [:footer
@@ -174,50 +114,30 @@
 
 (def carousel
   [:section
-   {:id "carousel"
-    :class "w-full bg-gray-100 dark:bg-zinc-900 py-8 scroll-mt-16"}
+   {:class "w-full bg-gray-100 dark:bg-zinc-900 py-8"}
 
    [:div {:class "max-w-3xl mx-auto px-4"}
 
     [:div
-     {:class "relative w-full h-64 sm:h-80 md:h-96 rounded-xl shadow-lg overflow-hidden"
-      :_ "
-         init
-           set my index to 0
+     {:class "carousel relative h-64 sm:h-80 md:h-96 overflow-hidden rounded-xl shadow-lg"}
 
-         every 4s
-           set slides to <.carousel-slide/> in me
-
-           remove .opacity-100 from slides
-           add .opacity-0 to slides
-
-           set my index to (my index + 1) mod slides.length
-
-           remove .opacity-0 from slides[my index]
-           add .opacity-100 to slides[my index]
-       "}
-
-     [:img.carousel-slide
+     [:img
       {:src "/img/childs-pose-kapiti.webp"
        :alt "Child's Pose"
-       :class "absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-100"}]
+       :class "carousel-slide"}]
 
-     [:img.carousel-slide
+     [:img
       {:src "/img/namaste.webp"
-       :alt "Lotus"
-       :class "absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0"}]
+       :alt "Namaste"
+       :class "carousel-slide"}]
 
-     [:img.carousel-slide
+     [:img
       {:src "/img/swiss-ball.webp"
        :alt "Swiss Ball"
-       :class "absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 opacity-0"}]
+       :class "carousel-slide"}]]]])
 
-     [:div
-      {:class "absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2"}
-      (for [_ (range 3)]
-        [:span {:class "w-2.5 h-2.5 bg-white rounded-full opacity-60"}])]]]])
-
-(def about
+(defn about []
+  (let [newsletter?* (h/local-signal :newsletter false)]
   [:section {:id "about"
              :class "scroll-mt-16 px-4 py-12 bg-gray-50 dark:bg-zinc-900"}
    [:div {:class "max-w-5xl mx-auto"}
@@ -260,20 +180,19 @@
      ;; --- Newsletter block at the end ---
     [:section  {:class "flex justify-center mt-12 mb-24"}
 
-     ;; Wrap just the teaser paragraph so we can overwrite it
-     [:div {:id "newsletter-teaser"}
-      [:a {:href "/mailchimp-form" ;; real URL fallback'
-           :class "inline-block self-center md:self-end px-6 py-3 text-xl rounded-2xl md:mt-0 md:mb-0 mb-8 font-semibold shadow-md bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 transition-colors duration-300 text-white"
-           :aria-label "Load Mailchimp signup form"
-           :hx-get "/mailchimp-form" ;; or "/mail-chimp-form" if you prefer
-           :hx-target "#newsletter-teaser" ;; replace this container
-           :hx-swap "outerHTML" ;; overwrite the teaser entirely
-           :hx-push-url "false"} ;; don’t change the URL
-                      ;; Visible text in whatever case you want to “match the PDF”
+     ;; Teaser button swaps itself for the signup form (client-side signal)
+     [:div {:id "newsletter-teaser"
+            :data-show (str "!" @newsletter?*)}
+      [:button {:type "button"
+                :class "inline-block self-center md:self-end px-6 py-3 text-xl rounded-2xl md:mt-0 md:mb-0 mb-8 font-semibold shadow-md bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 transition-colors duration-300 text-white"
+                :aria-label "Show Mailchimp signup form"
+                :data-on:click (str @newsletter?* " = true")}
        "Click here to join our Community Newsletter!"]]
-     ;; If you prefer to load the form elsewhere instead, keep this:
-     ;; [:div {:id "newsletter-signup"}]
-     ]]])
+     [:div {:id "newsletter-signup"
+            :class "w-full"
+            :style "display:none"
+            :data-show @newsletter?*}
+      chimp/mailchimp-form]]]]))
 
 (def hero-section
   [:section
@@ -417,10 +336,14 @@
      "img/childs-pose-kapiti.webp")
 
     (class-block
-     "Online Yoga &  Meditation"
+     "Online Yoga & Meditation"
      "Can't make it to a class?"
      ["Join me from home with online practices designed to help you move, stretch, breathe and relax."
-      "check out my YouTube free classes"]
+      [:a {:href youtube-url
+           :target "_blank"
+           :rel "noopener noreferrer"
+           :class "not-italic font-semibold text-emerald-700 hover:underline dark:text-emerald-400"}
+       "Watch my free classes on YouTube"]]
      "img/fish-zen-sq.webp")]])
 
 (def why-zhealth
@@ -447,7 +370,7 @@
      [:p "Passionate enough to keep learning."]
      [:p "Curious enough to keep creating."]]]])
 
-(def timetable
+(def timetable-section
   [:section {:id "timetable"
              :class "px-4 py-12 scroll-mt-16 bg-gray-50 dark:bg-zinc-900"} ;;bg-no-repeat bg-contain bg-center bg-[url(/img/fish-zen.webp)]
    [:div {:class "max-w-5xl mx-auto"}
@@ -513,50 +436,3 @@
     ;; [:div {:class "flex justify-center mt-4"}
     ;;  [:img {:src "/img/zhealth_logo.webp" :alt "Z Health" :class "rounded-lg shadow-lg w-full max-w-xs"}]]
     ]])
-
-(defn page-layout [ctx content]
-  (ui/base
-   ctx
-   [:body
-    {:class "min-h-dvh font-sans bg-zinc-50 dark:bg-zinc-900"}
-
-    fixed-navbar
-
-    [:main {:id "main"
-            :class "pt-16"}
-     content]
-
-    site-footer]))
-
-(defn home-page [ctx]
-  (page-layout
-   ctx
-   [:<>
-    hero-section
-    carousel]))
-
-(defn classes-page [ctx]
-  (page-layout ctx classes-section))
-
-(defn why-page [ctx]
-  (page-layout ctx why-zhealth))
-
-(defn timetable-page [ctx]
-  (page-layout ctx timetable))
-
-(defn about-page [ctx]
-  (page-layout ctx about))
-
-(def module
-  {:routes
-   [["/"               {:get home-page}]
-    ["/classes"        {:get classes-page}]
-    ["/why"            {:get why-page}]
-    ["/timetable"      {:get timetable-page}]
-    ["/about"          {:get about-page}]
-    ["/mailchimp-form" {:get chimp/mailchimp-form-handler}]
-    ["/ping"           {:get (fn [_]
-                               {:status 200
-                                :headers {"content-type"
-                                          "text/plain; charset=utf-8"}
-                                :body "pong"})}]]})
