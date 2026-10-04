@@ -274,8 +274,10 @@
     [:h3 {:class "text-2xl font-semibold text-green-800 dark:text-green-300 mb-3"}
      title]
 
-    [:p {:class "text-zinc-700 dark:text-zinc-300 mb-3 leading-relaxed"}
-     desc]
+    ;; desc is a single paragraph or a vector of paragraphs (strings or hiccup)
+    (for [para (if (string? desc) [desc] desc)]
+      [:p {:class "text-zinc-700 dark:text-zinc-300 mb-3 leading-relaxed"}
+       para])
 
     (for [line details]
       [:p {:class "text-sm italic text-gray-600 dark:text-gray-400"}
@@ -331,7 +333,10 @@
 
     (class-block
      "Yogilates"
-     "Ideal for those new to Yoga and/or Pilates. Introduces basic Pilates principles and incorporates Yoga postures and breath to reconnect the mind, body, and soul."
+     [[:strong "Yoga + Pilates = the best of both worlds."]
+      "A combination of strengthening Pilates movements, Yoga stretches, balance work, mobility and relaxation."
+      "Ideal for those new to Yoga and/or Pilates. Introduces basic Pilates principles and incorporates Yoga postures and breath to reconnect the mind, body, and soul."
+      [:strong "One of my most popular classes!"]]
      []
      "img/childs-pose-kapiti.webp")
 
