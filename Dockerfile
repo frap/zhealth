@@ -40,4 +40,4 @@ COPY --from=build /app/target/zhealth.jar /app/zhealth.jar
 ENV PORT=80
 EXPOSE 80
 
-CMD ["java", "-XX:-OmitStackTraceInFastThrow", "-XX:+CrashOnOutOfMemoryError", "-XX:MaxRAMPercentage=75", "-jar", "/app/zhealth.jar"]
+CMD ["java", "-XX:-OmitStackTraceInFastThrow", "-XX:+CrashOnOutOfMemoryError", "-Xmx192m", "-jar", "/app/zhealth.jar"]
