@@ -28,3 +28,6 @@ once:
   applications:
     - host: zhealth.nz
       image: ghcr.io/frap/zhealth:latest
+      # Publishes a deploy key to the GitHub "zhealth" environment so merges
+      # to main can redeploy (.github/workflows/deploy.yml)
+      github: frap/zhealth
