@@ -31,6 +31,9 @@ RUN tailwindcss -i resources/tailwind.css -o target/resources/public/css/main.cs
 
 FROM eclipse-temurin:21-jre
 
+# Links the GHCR package to the (public) repo so it can inherit visibility
+LABEL org.opencontainers.image.source=https://github.com/frap/zhealth
+
 WORKDIR /app
 COPY --from=build /app/target/zhealth.jar /app/zhealth.jar
 
