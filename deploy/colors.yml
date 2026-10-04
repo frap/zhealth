@@ -28,6 +28,3 @@ once:
   applications:
     - host: zhealth.nz
       image: ghcr.io/frap/zhealth:latest
-    # Same image; the app 301-redirects www to the apex
-    - host: www.zhealth.nz
-      image: ghcr.io/frap/zhealth:latest
