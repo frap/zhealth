@@ -54,10 +54,14 @@
             :class "md:hidden absolute top-16 inset-x-0 bg-gray-50 dark:bg-zinc-900 shadow-lg border-t border-gray-200 dark:border-zinc-800"
             :style "display:none"
             :data-show @menu-open?*}
-      [:ul {:class "px-4 py-4 space-y-1 text-green-800 dark:text-green-300"}
+      [:ul {:class "list-none my-0 px-4 py-4 space-y-1 text-green-800 dark:text-green-300"}
        (for [[route label] (cons [:home "Home"] nav-items)]
          [:li [:a (merge (h/navigate route)
-                         {:class "block p-3"
+                         {:class (str "block p-3 rounded transition-colors "
+                                      "hover:bg-gray-200 hover:text-blue-500 "
+                                      "active:bg-gray-300 "
+                                      "dark:hover:bg-zinc-800 dark:hover:text-blue-400 "
+                                      "dark:active:bg-zinc-700")
                           :data-on:click (str @menu-open?* " = false")})
                label]])]]]))
 
