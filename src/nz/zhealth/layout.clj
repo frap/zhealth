@@ -49,20 +49,20 @@
                 :stroke-linejoin "round"
                 :d "M3.75 5.25h16.5m-16.5 6h16.5m-16.5 6h16.5"}]]]]
 
-     ;; Mobile dropdown; close it after navigating
+     ;; Mobile dropdown. Plain links (full page load) rather than hyper's SPA
+     ;; navigate: SPA navigation from this menu did nothing on iOS Safari.
      [:div {:id "mobile-menu"
             :class "md:hidden absolute top-16 inset-x-0 bg-gray-50 dark:bg-zinc-900 shadow-lg border-t border-gray-200 dark:border-zinc-800"
             :style "display:none"
             :data-show @menu-open?*}
       [:ul {:class "list-none my-0 px-4 py-4 space-y-1 text-green-800 dark:text-green-300"}
        (for [[route label] (cons [:home "Home"] nav-items)]
-         [:li [:a (merge (h/navigate route)
-                         {:class (str "block p-3 rounded transition-colors "
-                                      "hover:bg-gray-200 hover:text-blue-500 "
-                                      "active:bg-gray-300 "
-                                      "dark:hover:bg-zinc-800 dark:hover:text-blue-400 "
-                                      "dark:active:bg-zinc-700")
-                          :data-on:click (str @menu-open?* " = false")})
+         [:li [:a {:href (:href (h/navigate route))
+                   :class (str "block p-3 rounded transition-colors "
+                               "hover:bg-gray-200 hover:text-blue-500 "
+                               "active:bg-gray-300 "
+                               "dark:hover:bg-zinc-800 dark:hover:text-blue-400 "
+                               "dark:active:bg-zinc-700")}
                label]])]]]))
 
 (defn page-layout [req content]
