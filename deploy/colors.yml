@@ -5,9 +5,10 @@ compute-api-version: 2
 provider-compute: vultr
 provider-backend: r2
 provider-smtp: resend
-# DNS for zhealth.nz is managed by hand; point the A record at the new
-# server's IP at cutover.
-provider-dns: no-infra
+# Cloudflare zone (registrar stays 1stdomains). ONCE creates the proxied A
+# record for each app host plus the Resend records. Needs
+# COLORS_PAR_CLOUDFLARE_API_TOKEN (Zone > DNS > Edit on zhealth.nz).
+provider-dns: cloudflare
 compute-prevent-destroy: true
 
 # Sydney is Vultr's closest region to NZ. 2 GB leaves room for Docker,
