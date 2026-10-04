@@ -2,7 +2,7 @@
  {:init (do (def tailwind "bin/tailwindcss")
             (def css-in "resources/tailwind.css")
             (def css-out "target/resources/public/css/main.css")
-            (def image "ghcr.io/frap/zhealth:latest"))
+            (def image-ref "ghcr.io/frap/zhealth:latest"))
 
   css       {:doc  "Compile and minify Tailwind CSS"
              :task (shell tailwind "-i" css-in "-o" css-out "--minify")}
@@ -22,8 +22,8 @@
              :task (shell "java -jar target/zhealth.jar")}
 
   image     {:doc  "Build the linux/amd64 server image with podman"
-             :task (shell "podman build --platform linux/amd64 -t" image ".")}
+             :task (shell "podman build --platform linux/amd64 -t" image-ref ".")}
 
   push      {:doc     "Build and push the image to GHCR (podman login ghcr.io first)"
              :depends [image]
-             :task    (shell "podman push" image)}}}
+             :task    (shell "podman push" image-ref)}}}
